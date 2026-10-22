@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#FFFFFF">
+  <title>AURA — Онлайн-магазин одежды</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FFFFFF;
+      --text: #000000;
+      --text-muted: #666666;
+      --green: #38C958;
+      --blue: #4E54FF;
+      --red: #E53935;
+      --footer-bg: #111111;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.07);
+      --radius-lg: 20px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #FFFFFF;
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    .page-container {
+      width: 100%;
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 0 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    @media (min-width: 768px) { .page-container { padding: 0 28px; } }
+    @media (min-width: 1200px) { .page-container { padding: 0 36px; } }
+
+    /* Шапка во всю ширину */
+    .top-bar-outer {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid #ECECEC;
+    }
+
+    .top-bar {
+      max-width: 1360px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+    }
+    @media (min-width: 768px) { .top-bar { padding: 14px 28px; } }
+
+    .header-left { display: flex; align-items: center; gap: 20px; }
+    .logo-pill { font-weight: 700; font-size: 26px; letter-spacing: 0.8px; cursor: pointer; user-select: none; }
+
+    .desktop-nav { display: none; gap: 24px; list-style: none; font-size: 14px; font-weight: 500; }
+    .desktop-nav li { cursor: pointer; transition: color 0.2s; }
+    .desktop-nav li:hover { color: var(--green); }
+    @media (min-width: 820px) { .desktop-nav { display: flex; } }
+
+    .header-search-box { display: none; flex: 1; max-width: 380px; margin: 0 24px; position: relative; }
+    @media (min-width: 820px) { .header-search-box { display: block; } }
+    .header-search-input {
+      width: 100%; background: #F0F0F0; border: none; border-radius: 20px;
+      padding: 9px 16px 9px 38px; font-size: 13px; font-family: 'Inter', sans-serif; outline: none;
+    }
+    .header-search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); }
+
+    .nav-pill { display: flex; align-items: center; gap: 10px; }
+
+    .icon-btn {
+      background: #F2F2F2; border: none; width: 42px; height: 42px; border-radius: 50%;
+      cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center;
+      color: var(--text); transition: background 0.2s;
+    }
+    .icon-btn:hover { background: #E4E4E4; }
+
+    .header-auth-btn {
+      background: #000; color: #fff; border: none; border-radius: 20px;
+      padding: 9px 18px; font-size: 13px; font-weight: 600; cursor: pointer;
+    }
+    .header-auth-btn:hover { opacity: 0.85; }
+
+    .user-pill-btn {
+      display: none; align-items: center; gap: 8px; background: #F2F2F2; border: 1px solid #E0E0E0;
+      border-radius: 20px; padding: 6px 14px 6px 8px; font-size: 13px; font-weight: 600; cursor: pointer;
+    }
+    .user-pill-btn .user-avatar-mini {
+      width: 28px; height: 28px; border-radius: 50%; background: #000; color: #fff;
+      display: flex; align-items: center; justify-content: center; font-size: 11px;
+    }
+
+    .admin-pill-btn {
+      background: var(--green); color: #fff; border: none; border-radius: 20px;
+      padding: 8px 14px; font-size: 12px; font-weight: 600; cursor: pointer; display: none;
+    }
+
+    .cart-badge {
+      position: absolute; top: -4px; right: -4px; background: var(--green); color: #fff;
+      font-size: 10px; font-weight: 700; width: 18px; height: 18px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .screen { display: none; flex: 1; animation: fadeIn 0.2s ease; width: 100%; }
+    .screen.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Баннер */
+    .hero-banner {
+      width: 100%; height: 380px; border-radius: var(--radius-lg);
+      position: relative; overflow: hidden; margin: 16px 0 28px;
+      display: flex; align-items: center; justify-content: center; text-align: center;
+    }
+    @media (min-width: 768px) { .hero-banner { height: 460px; margin: 24px 0 34px; } }
+    .hero-bg { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; }
+    .hero-bg img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.82); }
+    .hero-overlay {
+      position: relative; z-index: 2; padding: 28px 32px;
+      background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px);
+      max-width: 500px; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.14);
+    }
+    .hero-sub { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; font-weight: 600; }
+    .hero-title { font-size: 21px; font-weight: 700; line-height: 1.35; margin-bottom: 18px; }
+    .hero-btn {
+      background: #000; color: #fff; border: none; padding: 12px 24px; font-size: 12px;
+      font-family: 'Inter', sans-serif; cursor: pointer; border-radius: 10px; font-weight: 600;
+    }
+
+    .section-title {
+      font-size: 16px; font-weight: 700; text-transform: uppercase;
+      margin: 28px 0 16px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .autofit-indicator {
+      font-size: 11px; background: #E8F9EE; color: #198737;
+      padding: 5px 12px; border-radius: 12px; text-transform: none; font-weight: 600;
+    }
+
+    /* Категории */
+    .categories-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+    @media (min-width: 768px) { .categories-grid { gap: 20px; } }
+    .cat-card { cursor: pointer; text-align: center; }
+    .cat-card img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 14px; margin-bottom: 6px; transition: transform 0.2s; }
+    .cat-card:hover img { transform: scale(1.02); }
+    .cat-card span { font-size: 11px; font-weight: 600; }
+
+    /* Адаптивная сетка товаров */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px 12px;
+      padding-bottom: 40px;
+    }
+    @media (min-width: 640px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 20px 16px; } }
+    @media (min-width: 1000px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 24px 18px; } }
+    @media (min-width: 1280px) { .products-grid { grid-template-columns: repeat(5, 1fr); gap: 26px 20px; } }
+
+    .product-card { cursor: pointer; }
+    .product-img-wrap {
+      width: 100%; aspect-ratio: 3/4; background: #EAEAEA; border-radius: 14px;
+      overflow: hidden; margin-bottom: 8px; position: relative;
+    }
+    .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.25s; }
+    .product-card:hover .product-img-wrap img { transform: scale(1.04); }
+    .fit-badge {
+      position: absolute; bottom: 8px; left: 8px; background: rgba(56, 201, 88, 0.95);
+      color: #fff; font-size: 10px; font-weight: 600; padding: 4px 8px; border-radius: 6px;
+    }
+    .product-name { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+    .product-price { font-size: 13px; font-weight: 700; }
+
+    /* Детальная карточка */
+    .detail-layout { display: grid; grid-template-columns: 1fr; gap: 24px; padding: 18px 0 36px; }
+    @media (min-width: 768px) {
+      .detail-layout { grid-template-columns: 1fr 1fr; max-width: 980px; margin: 0 auto; gap: 36px; }
+    }
+    .detail-hero { width: 100%; aspect-ratio: 3/4; background: #EAEAEA; border-radius: 20px; overflow: hidden; position: relative; }
+    .detail-hero img { width: 100%; height: 100%; object-fit: cover; }
+    .detail-floating-bar { position: absolute; top: 14px; left: 14px; right: 14px; display: flex; justify-content: space-between; }
+    .circle-glass-btn {
+      width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.88);
+      border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+    .circle-glass-btn.liked svg { fill: var(--red); stroke: var(--red); }
+
+    .size-selector { display: flex; gap: 10px; margin-top: 10px; }
+    .size-btn {
+      padding: 9px 18px; border-radius: 10px; border: 1px solid #ccc;
+      background: #fff; cursor: pointer; font-size: 14px; font-weight: 600;
+    }
+    .size-btn.active { background: #000; color: #fff; border-color: #000; }
+
+    .card-box {
+      background: var(--bg); border-radius: var(--radius-lg); box-shadow: var(--shadow-md);
+      padding: 24px; border: 1px solid #ECECEC; margin-bottom: 20px;
+    }
+    .param-input {
+      width: 100%; background: #F4F4F4; border: 1px solid transparent; border-radius: 10px;
+      padding: 11px 14px; font-size: 13px; margin-bottom: 12px; font-family: 'Inter', sans-serif; outline: none;
+    }
+    .param-input:focus { border-color: #000; background: #fff; }
+
+    .switch { position: relative; display: inline-block; width: 48px; height: 26px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; inset: 0; background-color: #ccc; transition: .25s; border-radius: 26px; }
+    .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .25s; border-radius: 50%; }
+    input:checked + .slider { background-color: var(--green); }
+    input:checked + .slider:before { transform: translateX(22px); }
+
+    .delivery-btn {
+      width: 100%; padding: 13px; border-radius: 10px; font-size: 14px; font-family: 'Inter', sans-serif;
+      cursor: pointer; margin-bottom: 10px; border: 1px solid #ccc; background: #F0F0F0; color: #000; font-weight: 500;
+    }
+    .delivery-btn.active { background: var(--green); color: #fff; border-color: var(--green); font-weight: 600; }
+
+    .pvz-item {
+      display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px;
+      cursor: pointer; margin-bottom: 6px; border: 1px solid transparent;
+    }
+    .pvz-item.selected { background: #E8F9EE; border-color: var(--green); }
+    .pvz-logo { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px; flex-shrink: 0; }
+    .pvz-ym { background: #FFCC00; color: #000; }
+    .pvz-cdek { background: #E9F7EF; color: #00A859; }
+    .pvz-post { background: #1937FF; color: #fff; font-size: 8px; border-radius: 6px; }
+
+    /* Корзина */
+    .cart-wrap { max-width: 860px; margin: 0 auto; padding: 16px 0 36px; width: 100%; }
+    .cart-item {
+      background: var(--bg); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);
+      padding: 16px; display: grid; grid-template-columns: 100px 1fr; gap: 16px; align-items: center;
+      border: 1px solid #ECECEC; margin-bottom: 14px;
+    }
+    .cart-item img { width: 100px; height: 125px; object-fit: cover; border-radius: 12px; cursor: pointer; }
+    .qty-pill { display: inline-flex; align-items: center; background: #F0F0F0; border-radius: 8px; overflow: hidden; }
+    .qty-pill button { border: none; background: transparent; width: 28px; height: 28px; font-size: 16px; cursor: pointer; }
+    .qty-pill span { background: #fff; padding: 2px 12px; font-size: 13px; font-weight: 600; }
+
+    /* Профиль */
+    .profile-wrap { padding: 16px 0 36px; max-width: 960px; margin: 0 auto; width: 100%; }
+    .profile-grid-pc { display: grid; grid-template-columns: 1fr; gap: 24px; }
+    @media (min-width: 768px) { .profile-grid-pc { grid-template-columns: 1fr 1fr; } }
+
+    .role-badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+    .role-admin { background: #E8F9EE; color: #198737; }
+    .role-user { background: #F0F0F0; color: #555; }
+
+    /* Боковое меню СЛЕВА */
+    .drawer-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; display: none; }
+    .drawer-backdrop.open { display: block; }
+    .side-drawer {
+      position: fixed; top: 0; left: 0; width: 310px; height: 100vh; background: var(--bg);
+      z-index: 110; padding: 28px 24px; box-shadow: 10px 0 30px rgba(0,0,0,0.15);
+      transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex; flex-direction: column;
+    }
+    .side-drawer.open { transform: translateX(0); }
+    .drawer-list { list-style: none; margin-top: 28px; display: flex; flex-direction: column; gap: 18px; font-size: 17px; font-weight: 500; }
+    .drawer-list li { cursor: pointer; }
+
+    /* Модалки */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 120;
+      display: none; align-items: center; justify-content: center; padding: 16px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-card {
+      background: var(--bg); width: 100%; max-width: 440px; border-radius: 24px;
+      padding: 28px 24px; position: relative; max-height: 90vh; overflow-y: auto;
+    }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px; width: 34px; height: 34px;
+      border-radius: 50%; border: none; background: #F0F0F0; cursor: pointer;
+    }
+
+    /* АДМИН-ПАНЕЛЬ */
+    .admin-wrap { padding: 16px 0 36px; max-width: 1060px; margin: 0 auto; width: 100%; }
+    .admin-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .admin-tab {
+      padding: 10px 18px; border-radius: 12px; border: 1px solid #ddd; background: #fff;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+    }
+    .admin-tab.active { background: #000; color: #fff; border-color: #000; }
+    .admin-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .admin-table th, .admin-table td { padding: 12px 10px; border-bottom: 1px solid #EEE; text-align: left; }
+
+    /* ГОРИЗОНТАЛЬНЫЙ АДАПТИВНЫЙ ПОДВАЛ */
+    .footer {
+      width: 100%;
+      background: var(--footer-bg);
+      color: #FFFFFF;
+      padding: 56px 20px 48px;
+      margin-top: auto;
+    }
+    .footer-container {
+      max-width: 1360px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+    @media (min-width: 768px) {
+      .footer-container {
+        grid-template-columns: 1.2fr 1fr 1.6fr 1fr;
+        gap: 40px;
+        align-items: start;
+      }
+    }
+    .footer-col-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 14px;
+      color: #FFFFFF;
+    }
+    .footer-desc {
+      font-size: 12px;
+      color: #888888;
+      line-height: 1.6;
+      margin-top: 10px;
+    }
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      font-size: 12px;
+      color: #B5B5B5;
+    }
+    .footer-links li { cursor: pointer; transition: color 0.2s; }
+    .footer-links li:hover { color: #FFFFFF; }
+    .footer-form-row {
+      display: flex;
+      gap: 0;
+      width: 100%;
+      max-width: 360px;
+      margin-top: 8px;
+    }
+    .footer-form-row input {
+      flex: 1;
+      background: #FFFFFF;
+      color: #000000;
+      border: none;
+      padding: 10px 14px;
+      font-size: 12px;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+    }
+    .footer-form-row button {
+      background: #FFFFFF;
+      color: #000000;
+      border: none;
+      border-left: 1px solid #EAEAEA;
+      padding: 10px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.5px;
+      transition: background 0.2s;
+    }
+    .footer-form-row button:hover { background: #E5E5E5; }
+    .footer-social-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 4px;
+    }
+    .social-circle-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      color: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .social-circle-btn:hover { transform: scale(1.08); background: #EAEAEA; }
+
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: #111; color: #fff; padding: 12px 22px; border-radius: 20px;
+      font-size: 13px; z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<!-- ШАПКА -->
+<header class="top-bar-outer">
+  <div class="top-bar">
+    <div class="header-left">
+      <button class="icon-btn" onclick="toggleDrawer(true)" title="Меню">
+        <svg width="22" height="22" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <div class="logo-pill" onclick="showScreen('home')">AURA</div>
+      <ul class="desktop-nav">
+        <li onclick="openCatalogWithFilter('all')">Новинки</li>
+        <li onclick="openCatalogWithFilter('men')">Мужчинам</li>
+        <li onclick="openCatalogWithFilter('women')">Женщинам</li>
+        <li onclick="openCatalogWithFilter('accessories')">Аксессуары</li>
+      </ul>
+    </div>
+
+    <div class="header-search-box">
+      <svg class="header-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input type="text" id="headerSearchInput" class="header-search-input" placeholder="Поиск по каталогу..." oninput="syncSearch(this.value)">
+    </div>
+
+    <div class="nav-pill">
+      <button class="admin-pill-btn" id="adminHeaderBtn" onclick="openAdminPanel()">⚙ Админ-панель</button>
+      <button class="header-auth-btn" id="headerLoginBtn" onclick="openAuthModal()">Войти</button>
+
+      <div class="user-pill-btn" id="headerUserPill" onclick="showScreen('profile')" title="Открыть профиль">
+        <div class="user-avatar-mini" id="headerUserAvatar">U</div>
+        <span id="headerUserName">Профиль</span>
+      </div>
+
+      <button class="icon-btn" onclick="showScreen('favorites')" title="Избранное">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+
+      <button class="icon-btn" onclick="showScreen('cart')" title="Корзина">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7.16 14.26l.04-.12.94-1.7h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 3h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 5l-.95-2H1v2h2l3.6 7.59-1.35 2.44C4.52 16.37 5.48 18 7 18h12v-2H7.42c-.14 0-.25-.11-.26-.25z"/></svg>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ОСНОВНОЙ КОНТЕНТ -->
+<div class="page-container">
+
+  <!-- ЭКРАН 1: ГЛАВНАЯ -->
+  <main id="screen-home" class="screen active">
+    <div class="hero-banner">
+      <div class="hero-bg">
+        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1000&q=80" alt="Look 1">
+        <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1000&q=80" alt="Look 2">
+      </div>
+      <div class="hero-overlay">
+        <div class="hero-sub">НОВАЯ КОЛЛЕКЦИЯ ЛЕТО 2026</div>
+        <div class="hero-title">AURA — современный минимализм.<br>Твой стиль, твой город.</div>
+        <button class="hero-btn" onclick="openCatalogWithFilter('all')">СМОТРЕТЬ НОВИНКИ →</button>
+      </div>
+    </div>
+
+    <div class="section-title">ПОПУЛЯРНЫЕ КАТЕГОРИИ</div>
+    <div class="categories-grid">
+      <div class="cat-card" onclick="openCatalogWithFilter('women')">
+        <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=600&q=80" alt="Женщинам">
+        <span>[ЖЕНЩИНАМ]</span>
+      </div>
+      <div class="cat-card" onclick="openCatalogWithFilter('men')">
+        <img src="https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&w=600&q=80" alt="Мужчинам">
+        <span>[МУЖЧИНАМ]</span>
+      </div>
+      <div class="cat-card" onclick="openCatalogWithFilter('accessories')">
+        <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80" alt="Аксессуары">
+        <span>[АКСЕССУАРЫ]</span>
+      </div>
+    </div>
+
+    <div class="section-title">
+      <span>ХИТЫ ПРОДАЖ</span>
+      <span id="homeAutofitBadge" class="autofit-indicator" style="display:none;">Автоподбор ВКЛ</span>
+    </div>
+    <div class="products-grid" id="homeProductsGrid"></div>
+  </main>
+
+  <!-- ЭКРАН 2: КАТАЛОГ -->
+  <section id="screen-catalog" class="screen">
+    <div class="section-title">
+      <span id="catalogTitle">КАТАЛОГ</span>
+      <span id="catalogAutofitBadge" class="autofit-indicator" style="display:none;">Автоподбор ВКЛ</span>
+    </div>
+    <div class="products-grid" id="catalogProductsGrid"></div>
+  </section>
+
+  <!-- ЭКРАН 3: ИЗБРАННОЕ -->
+  <section id="screen-favorites" class="screen">
+    <div class="section-title">ИЗБРАННОЕ ♥</div>
+    <div class="products-grid" id="favoritesGrid"></div>
+  </section>
+
+  <!-- ЭКРАН 4: КАРТОЧКА ТОВАРА -->
+  <section id="screen-detail" class="screen">
+    <div class="detail-layout">
+      <div class="detail-hero">
+        <img id="detailImg" src="" alt="">
+        <div class="detail-floating-bar">
+          <button class="circle-glass-btn" onclick="showScreen('catalog')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <div style="display:flex; gap:10px;">
+            <button class="circle-glass-btn" onclick="openShareModal()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </button>
+            <button class="circle-glass-btn" id="likeBtn" onclick="toggleLikeCurrent()">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="#000" stroke="#000" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card-box">
+          <h1 id="detailTitle" style="font-size:24px; font-weight:600; margin-bottom:8px;">Худи оверсайз</h1>
+          <div id="detailPrice" style="font-size:24px; font-weight:700; color:var(--green); margin-bottom:20px;">5500 ₽</div>
+          
+          <h3 style="font-size:15px; font-weight:600; margin-bottom:10px;">О товаре</h3>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px 16px; font-size:13px; color:#444; margin-bottom:16px;">
+            <div>Сезон: <span id="detailSeason">Всесезонный</span></div>
+            <div>Материал: <span id="detailMaterial">Хлопок</span></div>
+            <div>Цвет: <span id="detailColor">Чёрный</span></div>
+            <div>Стиль: Повседневный</div>
+          </div>
+          <div style="font-size:12px; color:#666; margin-bottom:16px;" id="detailFitRange"></div>
+
+          <div style="font-size:13px; font-weight:600; margin-bottom:6px;">Выберите размер:</div>
+          <div class="size-selector" id="sizeSelector">
+            <button class="size-btn" onclick="selectSize('S')">S</button>
+            <button class="size-btn" onclick="selectSize('M')">M</button>
+            <button class="size-btn active" onclick="selectSize('L')">L</button>
+            <button class="size-btn" onclick="selectSize('XL')">XL</button>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+          <button class="delivery-btn" style="background:var(--blue); color:#fff; border:none; font-size:15px; font-weight:600; margin:0;" onclick="addCurrentToCart(false)">В корзину</button>
+          <button class="delivery-btn" style="background:var(--green); color:#fff; border:none; font-size:15px; font-weight:600; margin:0;" onclick="addCurrentToCart(true)">Купить сейчас</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ЭКРАН 5: ПРОФИЛЬ -->
+  <section id="screen-profile" class="screen">
+    <div class="profile-wrap">
+      <div id="profileContent">
+        <div class="card-box" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:24px;">
+          <div style="display:flex; align-items:center; gap:18px;">
+            <div style="width:72px; height:72px; border-radius:50%; background:#EAEAEA; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:24px; cursor:pointer; position:relative;" onclick="openProfileSettingsModal()" title="Изменить фото/профиль">
+              <span id="avatarInitials">A</span>
+              <span style="position:absolute; bottom:0; right:0; background:#000; color:#fff; border-radius:50%; width:22px; height:22px; font-size:12px; display:flex; align-items:center; justify-content:center;">✎</span>
+            </div>
+            <div>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span id="profileUsername" style="font-size:22px; font-weight:700;">USERNAME</span>
+                <span id="profileRoleBadge" class="role-badge role-user">Покупатель</span>
+              </div>
+              <div id="profileFullname" style="font-size:14px; color:#444; margin-top:2px;">ФИО</div>
+              <div id="profileEmail" style="font-size:12px; color:#888;">email</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="hero-btn" style="background:#000; padding:10px 18px; font-size:12px;" onclick="openProfileSettingsModal()">⚙ Настройки профиля</button>
+            <button class="hero-btn" style="background:#F0F0F0; color:#000; padding:10px 18px; font-size:12px;" onclick="logoutUser()">Выйти</button>
+          </div>
+        </div>
+
+        <div class="profile-grid-pc">
+          <div class="card-box">
+            <h3 style="font-size:16px; font-weight:700; margin-bottom:14px;">Ваши параметры и Автоподбор</h3>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; background:#F7F7F7; padding:12px; border-radius:12px;">
+              <span style="font-size:13px; font-weight:600;">Автоподбор вещей по меркам</span>
+              <label class="switch">
+                <input type="checkbox" id="autofitToggle" onchange="saveProfileChanges()">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <label style="font-size:11px; font-weight:600;">Рост (см):</label>
+            <input type="number" id="inputHeight" class="param-input" placeholder="см" oninput="saveProfileChanges()">
+
+            <label style="font-size:11px; font-weight:600;">Обхват груди (см):</label>
+            <input type="number" id="inputChest" class="param-input" placeholder="см" oninput="saveProfileChanges()">
+
+            <label style="font-size:11px; font-weight:600;">Обхват талии (см):</label>
+            <input type="number" id="inputWaist" class="param-input" placeholder="см" oninput="saveProfileChanges()">
+
+            <span style="font-size:12px; color:#000; text-decoration:underline; cursor:pointer;" onclick="toggleModal('measureModal', true)">Как снять мерки?</span>
+            <div id="recommendedSizeBox" style="margin-top:14px; padding:12px; background:#F5F5F5; border-radius:12px; font-size:12px;"></div>
+          </div>
+
+          <div class="card-box">
+            <h3 style="font-size:16px; font-weight:700; margin-bottom:14px;">Способы доставки</h3>
+            <button class="delivery-btn active" id="btnDelHome" onclick="setDeliveryType('home')">Доставка на дом</button>
+            <button class="delivery-btn" id="btnDelPvz" onclick="setDeliveryType('pvz')">Доставка на ПВЗ</button>
+
+            <div style="font-size:12px; font-weight:600; margin:14px 0 8px;">Популярные пункты выдачи:</div>
+            <div class="pvz-item selected" onclick="selectPvz(this, 'Яндекс Маркет — ул. Садовая, 42')">
+              <div class="pvz-logo pvz-ym">ЯМ</div>
+              <div><b>Яндекс Маркет</b><br><span style="font-size:11px; color:#666;">ПВЗ ул. Садовая, 42</span></div>
+            </div>
+            <div class="pvz-item" onclick="selectPvz(this, 'Яндекс Маркет — ул. Минская, 69')">
+              <div class="pvz-logo pvz-ym">ЯМ</div>
+              <div><b>Яндекс Маркет</b><br><span style="font-size:11px; color:#666;">ПВЗ ул. Минская, 69</span></div>
+            </div>
+            <div class="pvz-item" onclick="selectPvz(this, 'CDEK — пр-т Мира, 52')">
+              <div class="pvz-logo pvz-cdek">CDEK</div>
+              <div><b>CDEK</b><br><span style="font-size:11px; color:#666;">ПВЗ пр-т Мира, 52</span></div>
+            </div>
+            <div class="pvz-item" onclick="selectPvz(this, 'Почта России — пр-т Мира, 14')">
+              <div class="pvz-logo pvz-post">ПОЧТА</div>
+              <div><b>Почта России</b><br><span style="font-size:11px; color:#666;">ПВЗ пр-т Мира, 14</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ЭКРАН 6: КОРЗИНА -->
+  <section id="screen-cart" class="screen">
+    <div class="cart-wrap">
+      <h2 id="cartHeaderTitle" style="font-size:22px; font-weight:700; margin-bottom:20px;">КОРЗИНА (0)</h2>
+      <div id="cartList"></div>
+
+      <div class="card-box" style="margin-top:24px;">
+        <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:8px;">
+          <span>Товары (<span id="summaryCount">0</span>)</span>
+          <span id="summarySubtotal">0 ₽</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:12px; color:var(--red);">
+          <span>Скидка</span>
+          <span id="summaryDiscount">0 ₽</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:18px; font-weight:700; padding-top:12px; border-top:1px solid #ddd; margin-bottom:16px;">
+          <span>Итог</span>
+          <span id="summaryTotal" style="color:var(--green);">0 ₽</span>
+        </div>
+        <button class="hero-btn" style="width:100%; padding:15px; font-size:15px; background:var(--green);" onclick="checkoutAll()">Купить всё</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ЭКРАН 7: АДМИН-ПАНЕЛЬ -->
+  <section id="screen-admin" class="screen">
+    <div class="admin-wrap">
+      <h2 style="font-size:24px; font-weight:700; margin-bottom:16px;">⚙ Панель администратора AURA</h2>
+      <div class="admin-tabs">
+        <button class="admin-tab active" id="admTabUsers" onclick="switchAdminTab('users')">👥 Пользователи и Админы</button>
+        <button class="admin-tab" id="admTabProducts" onclick="switchAdminTab('products')">👕 Управление товарами</button>
+        <button class="admin-tab" id="admTabOrders" onclick="switchAdminTab('orders')">📦 Заказы клиентов</button>
+      </div>
+
+      <div id="adminUsersSection" class="card-box" style="overflow-x:auto;">
+        <h3 style="font-size:16px; margin-bottom:12px;">Зарегистрированные аккаунты</h3>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Никнейм / ФИО</th>
+              <th>Email</th>
+              <th>Роль</th>
+              <th>Действие</th>
+            </tr>
+          </thead>
+          <tbody id="adminUsersTable"></tbody>
+        </table>
+      </div>
+
+      <div id="adminProductsSection" style="display:none;">
+        <div class="card-box">
+          <h3 style="font-size:16px; margin-bottom:14px;">+ Добавить новую карточку товара</h3>
+          <form onsubmit="handleAdminAddProduct(event)" style="display:grid; gap:10px;">
+            <input type="text" id="newTitle" class="param-input" placeholder="Название вещи" style="margin:0;" required>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <input type="number" id="newPrice" class="param-input" placeholder="Цена (₽)" style="margin:0;" required>
+              <select id="newCategory" class="param-input" style="margin:0;">
+                <option value="men">Мужчинам</option>
+                <option value="women">Женщинам</option>
+                <option value="accessories">Аксессуары</option>
+              </select>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <input type="text" id="newColor" class="param-input" value="Чёрный" placeholder="Цвет" style="margin:0;" required>
+              <input type="text" id="newMaterial" class="param-input" value="Хлопок" placeholder="Материал" style="margin:0;" required>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <input type="number" id="newMinHeight" class="param-input" value="155" placeholder="Мин. рост (см)" style="margin:0;">
+              <input type="number" id="newMaxHeight" class="param-input" value="196" placeholder="Макс. рост (см)" style="margin:0;">
+            </div>
+            <div>
+              <label style="font-size:12px; font-weight:600;">Загрузить фото с устройства:</label>
+              <input type="file" id="newImageFile" accept="image/*" class="param-input" style="margin-top:4px;">
+            </div>
+            <input type="url" id="newImageUrl" class="param-input" placeholder="Или ссылка на фото (https://...)" style="margin:0;">
+            <button type="submit" class="hero-btn" style="background:var(--green); padding:14px;">Сохранить товар в базу сервера</button>
+          </form>
+        </div>
+
+        <div class="card-box">
+          <h3 style="font-size:16px; margin-bottom:12px;">Товары в базе данных</h3>
+          <div id="adminProductsList"></div>
+        </div>
+      </div>
+
+      <div id="adminOrdersSection" class="card-box" style="display:none;">
+        <h3 style="font-size:16px; margin-bottom:12px;">Все заказы магазина</h3>
+        <div id="adminOrdersList"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ГОРИЗОНТАЛЬНЫЙ ПОДВАЛ -->
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Колонка 1: Бренд и слоган -->
+    <div>
+      <div style="font-size:26px; font-weight:700; letter-spacing:1px; color:#fff;">AURA</div>
+      <div style="font-size:12px; color:#777; margin-top:2px;">© 2026 AURA Brand</div>
+      <p class="footer-desc">Современный минимализм.<br>Твой стиль, твой город.</p>
+    </div>
+
+    <!-- Колонка 2: Информация -->
+    <div>
+      <div class="footer-col-title">Информация</div>
+      <ul class="footer-links">
+        <li onclick="showToast('Раздел: Покупателям')">Покупателям</li>
+        <li onclick="showToast('AURA — бренд современного минимализма')">О компании</li>
+        <li onclick="showToast('Контакты: support@aura-shop.ru')">Контакты</li>
+        <li onclick="showToast('Правила продаж и возврата')">Правила продаж</li>
+        <li onclick="toggleModal('measureModal', true)">FAQ / Мерки</li>
+      </ul>
+    </div>
+
+    <!-- Колонка 3: Рассылка -->
+    <div>
+      <div class="footer-col-title">Рассылка новинок</div>
+      <div style="font-size:12px; color:#888; margin-bottom:10px;">Будьте в курсе дропов новых коллекций и закрытых распродаж.</div>
+      <form onsubmit="handleFooterSubscribe(event)">
+        <div class="footer-form-row">
+          <input type="email" id="footerSubEmail" placeholder="Введите ваш email" required>
+          <button type="submit">ПОДПИСАТЬСЯ</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Колонка 4: Социальные сети -->
+    <div>
+      <div class="footer-col-title">Мы в соцсетях</div>
+      <div class="footer-social-row">
+        <a href="#tg" class="social-circle-btn" onclick="event.preventDefault(); showToast('Telegram-канал AURA')">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+        </a>
+        <a href="#ig" class="social-circle-btn" onclick="event.preventDefault(); showToast('Instagram AURA')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="#x" class="social-circle-btn" onclick="event.preventDefault(); showToast('X (Twitter) AURA')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- БОКОВОЕ МЕНЮ СЛЕВА -->
+<div class="drawer-backdrop" id="drawerBackdrop" onclick="toggleDrawer(false)"></div>
+<aside class="side-drawer" id="sideDrawer">
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <div class="logo-pill" style="font-size:22px;">AURA</div>
+    <button class="icon-btn" onclick="toggleDrawer(false)">✕</button>
+  </div>
+  <ul class="drawer-list">
+    <li onclick="openCatalogWithFilter('all'); toggleDrawer(false);">Новинки</li>
+    <li onclick="openCatalogWithFilter('men'); toggleDrawer(false);">Мужчинам</li>
+    <li onclick="openCatalogWithFilter('women'); toggleDrawer(false);">Женщинам</li>
+    <li onclick="openCatalogWithFilter('accessories'); toggleDrawer(false);">Аксессуары</li>
+    <li onclick="showScreen('favorites'); toggleDrawer(false);">Избранное ♥</li>
+  </ul>
+</aside>
+
+<!-- МОДАЛЬНОЕ ОКНО: НАСТРОЙКИ ПРОФИЛЯ -->
+<div class="modal-overlay" id="profileSettingsModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="toggleModal('profileSettingsModal', false)">✕</button>
+    <h3 style="font-size:18px; font-weight:700; margin-bottom:14px;">Настройки профиля</h3>
+    <form onsubmit="handleSaveProfileSettings(event)">
+      <label style="font-size:12px; font-weight:600; display:block; margin-bottom:4px;">Никнейм (USERNAME)</label>
+      <input type="text" id="editUsername" class="param-input" placeholder="USERNAME" required>
+
+      <label style="font-size:12px; font-weight:600; display:block; margin-bottom:4px;">Имя и Фамилия (ФИО)</label>
+      <input type="text" id="editFullname" class="param-input" placeholder="Моисеев Вячеслав Романович" required>
+
+      <label style="font-size:12px; font-weight:600; display:block; margin-bottom:4px;">Email</label>
+      <input type="email" id="editEmail" class="param-input" placeholder="user@mail.ru" required>
+
+      <div style="display:flex; gap:10px; margin-top:10px;">
+        <button type="button" class="hero-btn" style="flex:1; background:#F0F0F0; color:#000;" onclick="toggleModal('profileSettingsModal', false)">Отмена</button>
+        <button type="submit" class="hero-btn" style="flex:1; background:var(--green);">Сохранить</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО: ВХОД И РЕГИСТРАЦИЯ -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="toggleModal('authModal', false)">✕</button>
+    <div style="display:flex; gap:10px; margin-bottom:18px;">
+      <button id="modalTabLoginBtn" class="delivery-btn active" style="margin:0;" onclick="switchAuthModalTab('login')">Вход</button>
+      <button id="modalTabRegBtn" class="delivery-btn" style="margin:0;" onclick="switchAuthModalTab('register')">Регистрация</button>
+    </div>
+
+    <form id="modalLoginForm" onsubmit="handleLogin(event)">
+      <label style="font-size:12px; font-weight:600; display:block; margin-bottom:4px;">Email или Никнейм</label>
+      <input type="text" id="modalLoginEmail" class="param-input" placeholder="admin@aura.ru" required>
+      <label style="font-size:12px; font-weight:600; display:block; margin-bottom:4px;">Пароль</label>
+      <input type="password" id="modalLoginPass" class="param-input" placeholder="••••••••" required>
+      <button type="submit" class="hero-btn" style="width:100%; padding:14px; background:var(--green); font-size:14px;">Войти</button>
+    </form>
+
+    <form id="modalRegisterForm" style="display:none;" onsubmit="handleRegister(event)">
+      <label style="font-size:12px; font-weight:600; display:block; margin-bottom:4px;">Email</label>
+      <input type="email" id="modalRegEmail" class="param-input" placeholder="user@mail.ru" required>
+      <label style="font-size:12px; font-weight:600; display:block; margin-bottom:4px;">Никнейм (USERNAME)</label>
+      <input type="text" id="modalRegUsername" class="param-input" placeholder="Например: SLAVA" required>
+      <label style="font-size:12px; font-weight:600; display:block; margin-bottom:4px;">Ваше имя и фамилия (ФИО)</label>
+      <input type="text" id="modalRegFullname" class="param-input" placeholder="Иван Иванов" required>
+      <label style="font-size:12px; font-weight:600; display:block; margin-bottom:4px;">Пароль</label>
+      <input type="password" id="modalRegPass" class="param-input" placeholder="Минимум 6 знаков" required>
+      <button type="submit" class="hero-btn" style="width:100%; padding:14px; background:#000; font-size:14px;">Зарегистрироваться</button>
+    </form>
+  </div>
+</div>
+
+<!-- МОДАЛКА: ПОДЕЛИТЬСЯ -->
+<div class="modal-overlay" id="shareModal">
+  <div class="modal-card" style="text-align:center;">
+    <button class="modal-close" onclick="toggleModal('shareModal', false)">✕</button>
+    <h3 style="font-size:18px; margin-bottom:12px;">Поделиться товаром</h3>
+    <div id="shareUrlBox" style="background:#F0F0F0; padding:12px; border-radius:10px; font-size:12px; word-break:break-all; cursor:pointer; margin-bottom:16px;" onclick="copyShareLink()"></div>
+    <button class="hero-btn" style="width:100%;" onclick="copyShareLink()">Скопировать ссылку</button>
+  </div>
+</div>
+
+<!-- МОДАЛКА: КАК СНЯТЬ МЕРКИ -->
+<div class="modal-overlay" id="measureModal">
+  <div class="modal-card" style="text-align:center; background:#FFFBF7;">
+    <button class="modal-close" onclick="toggleModal('measureModal', false)">✕</button>
+    <h3 style="font-size:18px; margin-bottom:12px;">Как снять мерки?</h3>
+    <svg width="180" height="220" viewBox="0 0 220 260" style="margin:0 auto; display:block;">
+      <circle cx="80" cy="30" r="14" fill="#000"/>
+      <path d="M62 52 C62 46, 98 46, 98 52 L106 105 L98 105 L93 72 L91 102 L97 145 L91 235 L82 235 L80 155 L78 235 L69 235 L63 145 L69 102 L67 72 L62 105 L54 105 Z" fill="#000"/>
+      <line x1="65" y1="78" x2="128" y2="78" stroke="#666" stroke-dasharray="3,3" stroke-width="1.5"/>
+      <text x="132" y="75" font-size="10" font-family="Inter" font-weight="600">ОГ — Обхват груди</text>
+      <line x1="68" y1="104" x2="128" y2="104" stroke="#666" stroke-dasharray="3,3" stroke-width="1.5"/>
+      <text x="132" y="101" font-size="10" font-family="Inter" font-weight="600">ОТ — Обхват талии</text>
+    </svg>
+    <p style="font-size:12px; color:#555; margin-top:10px;">Измеряйте параметры сантиметровой лентой плотно по фигуре.</p>
+  </div>
+</div>
+
+<div class="toast" id="toast">Уведомление</div>
+
+<script>
+  let products = [];
+  let currentUser = null;
+  let activeCategory = 'all';
+  let currentProduct = null;
+  let selectedSize = 'L';
+  let searchQuery = '';
+
+  async function api(path, options = {}) {
+    const res = await fetch(path, {
+      headers: { 'Content-Type': 'application/json' },
+      ...options
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Ошибка запроса');
+    return data;
+  }
+
+  async function initApp() {
+    try {
+      const prodData = await api('/api/products');
+      products = prodData.products;
+
+      const savedId = localStorage.getItem('aura_user_id');
+      if (savedId) {
+        try {
+          const userData = await api(`/api/user?id=${savedId}`);
+          currentUser = userData.user;
+        } catch {
+          localStorage.removeItem('aura_user_id');
+        }
+      }
+      updateAuthUI();
+      renderProducts();
+    } catch (e) {
+      showToast('Запустите server.js для синхронизации');
+    }
+  }
+
+  function updateAuthUI() {
+    const isLogged = Boolean(currentUser);
+    const loginBtn = document.getElementById('headerLoginBtn');
+    const userPill = document.getElementById('headerUserPill');
+    const adminBtn = document.getElementById('adminHeaderBtn');
+
+    if (isLogged) {
+      loginBtn.style.display = 'none';
+      userPill.style.display = 'inline-flex';
+      adminBtn.style.display = (currentUser.role === 'admin') ? 'inline-block' : 'none';
+
+      document.getElementById('headerUserName').textContent = currentUser.username;
+      document.getElementById('headerUserAvatar').textContent = currentUser.username[0].toUpperCase();
+
+      document.getElementById('profileUsername').textContent = currentUser.username;
+      document.getElementById('profileFullname').textContent = currentUser.fullname;
+      document.getElementById('profileEmail').textContent = currentUser.email;
+      document.getElementById('avatarInitials').textContent = currentUser.username[0].toUpperCase();
+
+      const badge = document.getElementById('profileRoleBadge');
+      badge.textContent = currentUser.role === 'admin' ? (currentUser.isSuperAdmin ? 'Главный Администратор' : 'Администратор') : 'Покупатель';
+      badge.className = 'role-badge ' + (currentUser.role === 'admin' ? 'role-admin' : 'role-user');
+
+      document.getElementById('inputHeight').value = currentUser.params?.height || '';
+      document.getElementById('inputChest').value = currentUser.params?.chest || '';
+      document.getElementById('inputWaist').value = currentUser.params?.waist || '';
+      document.getElementById('autofitToggle').checked = Boolean(currentUser.params?.autofit);
+
+      const count = (currentUser.cart || []).reduce((acc, i) => acc + i.qty, 0);
+      document.getElementById('cartBadge').textContent = count;
+      updateRecommendedSizeText();
+    } else {
+      loginBtn.style.display = 'inline-block';
+      userPill.style.display = 'none';
+      adminBtn.style.display = 'none';
+      document.getElementById('cartBadge').textContent = '0';
+    }
+  }
+
+  function openProfileSettingsModal() {
+    if (!currentUser) return openAuthModal();
+    document.getElementById('editUsername').value = currentUser.username;
+    document.getElementById('editFullname').value = currentUser.fullname;
+    document.getElementById('editEmail').value = currentUser.email;
+    toggleModal('profileSettingsModal', true);
+  }
+
+  async function handleSaveProfileSettings(e) {
+    e.preventDefault();
+    const newUsername = document.getElementById('editUsername').value.trim();
+    const newFullname = document.getElementById('editFullname').value.trim();
+    const newEmail = document.getElementById('editEmail').value.trim();
+
+    try {
+      const data = await api('/api/user/sync', {
+        method: 'PUT',
+        body: JSON.stringify({
+          userId: currentUser.id,
+          username: newUsername,
+          fullname: newFullname,
+          email: newEmail,
+          params: currentUser.params,
+          cart: currentUser.cart,
+          likes: currentUser.likes
+        })
+      });
+      currentUser = data.user;
+      updateAuthUI();
+      toggleModal('profileSettingsModal', false);
+      showToast('Данные профиля успешно обновлены!');
+    } catch (err) {
+      showToast(err.message);
+    }
+  }
+
+  function handleFooterSubscribe(e) {
+    e.preventDefault();
+    const email = document.getElementById('footerSubEmail').value.trim();
+    if (!email) return;
+    document.getElementById('footerSubEmail').value = '';
+    showToast('Вы успешно подписались на рассылку AURA!');
+  }
+
+  function openAuthModal() { toggleModal('authModal', true); }
+
+  function switchAuthModalTab(tab) {
+    document.getElementById('modalTabLoginBtn').classList.toggle('active', tab === 'login');
+    document.getElementById('modalTabRegBtn').classList.toggle('active', tab === 'register');
+    document.getElementById('modalLoginForm').style.display = tab === 'login' ? 'block' : 'none';
+    document.getElementById('modalRegisterForm').style.display = tab === 'register' ? 'block' : 'none';
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    try {
+      const email = document.getElementById('modalLoginEmail').value.trim();
+      const password = document.getElementById('modalLoginPass').value;
+      const data = await api('/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password })
+      });
+      currentUser = data.user;
+      localStorage.setItem('aura_user_id', currentUser.id);
+      toggleModal('authModal', false);
+      updateAuthUI();
+      renderProducts();
+      showToast(`Добро пожаловать, ${currentUser.username}!`);
+    } catch (err) {
+      showToast(err.message);
+    }
+  }
+
+  async function handleRegister(e) {
+    e.preventDefault();
+    try {
+      const email = document.getElementById('modalRegEmail').value.trim();
+      const username = document.getElementById('modalRegUsername').value.trim();
+      const fullname = document.getElementById('modalRegFullname').value.trim();
+      const password = document.getElementById('modalRegPass').value;
+      const data = await api('/api/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({ email, username, fullname, password })
+      });
+      currentUser = data.user;
+      localStorage.setItem('aura_user_id', currentUser.id);
+      toggleModal('authModal', false);
+      updateAuthUI();
+      renderProducts();
+      showToast('Аккаунт успешно создан!');
+    } catch (err) {
+      showToast(err.message);
+    }
+  }
+
+  function logoutUser() {
+    currentUser = null;
+    localStorage.removeItem('aura_user_id');
+    updateAuthUI();
+    showScreen('home');
+    renderProducts();
+    showToast('Вы вышли из профиля');
+  }
+
+  async function syncWithServer() {
+    if (!currentUser) return;
+    try {
+      const data = await api('/api/user/sync', {
+        method: 'PUT',
+        body: JSON.stringify({
+          userId: currentUser.id,
+          username: currentUser.username,
+          fullname: currentUser.fullname,
+          email: currentUser.email,
+          params: currentUser.params,
+          cart: currentUser.cart,
+          likes: currentUser.likes
+        })
+      });
+      currentUser = data.user;
+      updateAuthUI();
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  function getRecommendedSize() {
+    if (!currentUser) return null;
+    const c = Number(currentUser.params?.chest);
+    const h = Number(currentUser.params?.height);
+    if (!c && !h) return null;
+    if (c > 0) {
+      if (c < 90) return 'S';
+      if (c <= 98) return 'M';
+      if (c <= 106) return 'L';
+      return 'XL';
+    }
+    if (h < 168) return 'S';
+    if (h <= 176) return 'M';
+    if (h <= 184) return 'L';
+    return 'XL';
+  }
+
+  function matchesAutofit(product) {
+    if (!currentUser || !currentUser.params?.autofit) return true;
+    const h = Number(currentUser.params?.height);
+    const c = Number(currentUser.params?.chest);
+    if (h && (h < product.minHeight || h > product.maxHeight)) return false;
+    if (c && (c < product.minChest || c > product.maxChest)) return false;
+    return true;
+  }
+
+  function renderProducts() {
+    const recSize = getRecommendedSize();
+    const showBadge = currentUser && currentUser.params?.autofit && (currentUser.params?.height || currentUser.params?.chest);
+
+    document.getElementById('homeAutofitBadge').style.display = showBadge ? 'inline-block' : 'none';
+    document.getElementById('catalogAutofitBadge').style.display = showBadge ? 'inline-block' : 'none';
+
+    const cardHTML = (p) => `
+      <div class="product-card" onclick="openProductDetail(${p.id})">
+        <div class="product-img-wrap">
+          <img src="${p.image}" alt="${p.title}">
+          ${showBadge && recSize ? `<span class="fit-badge">Ваш размер: ${recSize}</span>` : ''}
+        </div>
+        <div class="product-name">${p.title}</div>
+        <div class="product-price">${p.price} ₽</div>
+      </div>
+    `;
+
+    const homeList = products.filter(matchesAutofit);
+    document.getElementById('homeProductsGrid').innerHTML = homeList.length
+      ? homeList.map(cardHTML).join('')
+      : `<div style="grid-column:1/-1; padding:20px; color:#666;">Нет подходящих вещей под указанные мерки.</div>`;
+
+    const catList = products.filter(p => {
+      const catOk = activeCategory === 'all' || p.category === activeCategory;
+      const qOk = !searchQuery || p.title.toLowerCase().includes(searchQuery.toLowerCase());
+      return catOk && qOk && matchesAutofit(p);
+    });
+    document.getElementById('catalogProductsGrid').innerHTML = catList.length
+      ? catList.map(cardHTML).join('')
+      : `<div style="grid-column:1/-1; padding:20px; color:#666;">Ничего не найдено.</div>`;
+
+    const likedIds = currentUser ? (currentUser.likes || []) : [];
+    const favList = products.filter(p => likedIds.includes(p.id));
+    document.getElementById('favoritesGrid').innerHTML = favList.length
+      ? favList.map(cardHTML).join('')
+      : `<div style="grid-column:1/-1; padding:20px; color:#666;">В избранном пока пусто.</div>`;
+  }
+
+  function showScreen(id) {
+    if (id === 'profile' && !currentUser) return openAuthModal();
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + id).classList.add('active');
+    if (id === 'cart') renderCart();
+    if (id === 'favorites') renderProducts();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function openCatalogWithFilter(cat) {
+    activeCategory = cat;
+    const names = { all: 'КАТАЛОГ — НОВИНКИ', women: 'ЖЕНЩИНАМ', men: 'МУЖЧИНАМ', accessories: 'АКСЕССУАРЫ' };
+    document.getElementById('catalogTitle').textContent = names[cat] || 'КАТАЛОГ';
+    renderProducts();
+    showScreen('catalog');
+  }
+
+  function syncSearch(val) {
+    searchQuery = val;
+    showScreen('catalog');
+    renderProducts();
+  }
+
+  function openProductDetail(id) {
+    currentProduct = products.find(p => p.id === id) || products[0];
+    document.getElementById('detailImg').src = currentProduct.image;
+    document.getElementById('detailTitle').textContent = currentProduct.title;
+    document.getElementById('detailPrice').textContent = currentProduct.price + ' ₽';
+    document.getElementById('detailSeason').textContent = currentProduct.season || 'Всесезонный';
+    document.getElementById('detailMaterial').textContent = currentProduct.material || 'Хлопок';
+    document.getElementById('detailColor').textContent = currentProduct.color || 'Чёрный';
+    document.getElementById('detailFitRange').textContent = `Рост: ${currentProduct.minHeight}–${currentProduct.maxHeight} см | Обхват груди: ${currentProduct.minChest}–${currentProduct.maxChest} см`;
+
+    const rec = getRecommendedSize();
+    if (rec) selectSize(rec);
+    const liked = currentUser && currentUser.likes.includes(currentProduct.id);
+    document.getElementById('likeBtn').classList.toggle('liked', Boolean(liked));
+    showScreen('detail');
+  }
+
+  function selectSize(size) {
+    selectedSize = size;
+    document.querySelectorAll('#sizeSelector .size-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.textContent === size);
+    });
+  }
+
+  async function toggleLikeCurrent() {
+    if (!currentUser) {
+      showToast('Войдите в аккаунт для сохранения');
+      return openAuthModal();
+    }
+    const idx = currentUser.likes.indexOf(currentProduct.id);
+    if (idx === -1) {
+      currentUser.likes.push(currentProduct.id);
+      showToast('Добавлено в избранное ♥');
+    } else {
+      currentUser.likes.splice(idx, 1);
+      showToast('Удалено из избранного');
+    }
+    document.getElementById('likeBtn').classList.toggle('liked', currentUser.likes.includes(currentProduct.id));
+    await syncWithServer();
+  }
+
+  async function addCurrentToCart(goToCart) {
+    if (!currentUser) {
+      showToast('Сначала авторизуйтесь');
+      return openAuthModal();
+    }
+    const existing = currentUser.cart.find(i => i.productId === currentProduct.id && i.size === selectedSize);
+    if (existing) existing.qty += 1;
+    else currentUser.cart.push({ productId: currentProduct.id, size: selectedSize, qty: 1 });
+
+    await syncWithServer();
+    if (goToCart) showScreen('cart');
+    else showToast(`${currentProduct.title} (${selectedSize}) в корзине!`);
+  }
+
+  function renderCart() {
+    const listEl = document.getElementById('cartList');
+    const cart = currentUser ? currentUser.cart : [];
+    const totalCount = cart.reduce((acc, i) => acc + i.qty, 0);
+    document.getElementById('cartHeaderTitle').textContent = `КОРЗИНА (${totalCount})`;
+    document.getElementById('summaryCount').textContent = totalCount;
+
+    if (!currentUser || cart.length === 0) {
+      listEl.innerHTML = `<div style="text-align:center; padding:40px; color:#666;">Корзина пуста</div>`;
+      document.getElementById('summarySubtotal').textContent = '0 ₽';
+      document.getElementById('summaryDiscount').textContent = '0 ₽';
+      document.getElementById('summaryTotal').textContent = '0 ₽';
+      return;
+    }
+
+    let subtotal = 0;
+    listEl.innerHTML = cart.map((item, idx) => {
+      const p = products.find(prod => prod.id === item.productId) || products[0];
+      subtotal += p.price * item.qty;
+      return `
+        <div class="cart-item">
+          <img src="${p.image}" alt="${p.title}" onclick="openProductDetail(${p.id})">
+          <div>
+            <div style="font-weight:600; font-size:15px; margin-bottom:4px;">${p.title}</div>
+            <div style="font-size:12px; color:#555; margin-bottom:8px;">Цвет: ${p.color} | Размер: ${item.size} | <b>${p.price} ₽</b></div>
+            <div style="display:flex; align-items:center; gap:14px;">
+              <div class="qty-pill">
+                <button onclick="changeQty(${idx}, -1)">−</button>
+                <span>${item.qty}</span>
+                <button onclick="changeQty(${idx}, 1)">+</button>
+              </div>
+              <button style="background:none; border:none; font-size:12px; color:var(--red); cursor:pointer;" onclick="removeCartItem(${idx})">Удалить</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    const discount = subtotal >= 15000 ? 5000 : (subtotal >= 8000 ? 1500 : 0);
+    const finalTotal = Math.max(0, subtotal - discount);
+    document.getElementById('summarySubtotal').textContent = subtotal + ' ₽';
+    document.getElementById('summaryDiscount').textContent = discount > 0 ? `-${discount} ₽` : '0 ₽';
+    document.getElementById('summaryTotal').textContent = finalTotal + ' ₽';
+  }
+
+  async function changeQty(idx, delta) {
+    currentUser.cart[idx].qty += delta;
+    if (currentUser.cart[idx].qty <= 0) currentUser.cart.splice(idx, 1);
+    await syncWithServer();
+    renderCart();
+  }
+
+  async function removeCartItem(idx) {
+    currentUser.cart.splice(idx, 1);
+    await syncWithServer();
+    renderCart();
+  }
+
+  async function checkoutAll() {
+    if (!currentUser || currentUser.cart.length === 0) return showToast('Корзина пуста');
+    let subtotal = 0;
+    const detailedItems = currentUser.cart.map(item => {
+      const p = products.find(prod => prod.id === item.productId) || products[0];
+      subtotal += p.price * item.qty;
+      return { title: p.title, size: item.size, qty: item.qty, price: p.price };
+    });
+    const discount = subtotal >= 15000 ? 5000 : (subtotal >= 8000 ? 1500 : 0);
+    const total = Math.max(0, subtotal - discount);
+
+    try {
+      const res = await api('/api/orders', {
+        method: 'POST',
+        body: JSON.stringify({
+          userId: currentUser.id,
+          items: detailedItems,
+          total,
+          deliveryType: currentUser.params.delivery,
+          address: currentUser.params.pvz
+        })
+      });
+      currentUser = res.user;
+      updateAuthUI();
+      renderCart();
+      showToast('Заказ оформлен!');
+    } catch (e) {
+      showToast(e.message);
+    }
+  }
+
+  async function saveProfileChanges() {
+    if (!currentUser) return;
+    currentUser.params.height = document.getElementById('inputHeight').value;
+    currentUser.params.chest = document.getElementById('inputChest').value;
+    currentUser.params.waist = document.getElementById('inputWaist').value;
+    currentUser.params.autofit = document.getElementById('autofitToggle').checked;
+    updateRecommendedSizeText();
+    renderProducts();
+    await syncWithServer();
+  }
+
+  function updateRecommendedSizeText() {
+    const box = document.getElementById('recommendedSizeBox');
+    const size = getRecommendedSize();
+    if (size) {
+      box.innerHTML = `Ваш подходящий размер: <b>${size}</b><br><span style="color:#198737;">Подходящих товаров: ${products.filter(matchesAutofit).length}</span>`;
+    } else {
+      box.textContent = 'Введите рост и обхват груди для расчёта размера.';
+    }
+  }
+
+  async function setDeliveryType(type) {
+    if (!currentUser) return;
+    currentUser.params.delivery = type;
+    document.getElementById('btnDelHome').classList.toggle('active', type === 'home');
+    document.getElementById('btnDelPvz').classList.toggle('active', type === 'pvz');
+    await syncWithServer();
+  }
+
+  async function selectPvz(el, name) {
+    document.querySelectorAll('.pvz-item').forEach(i => i.classList.remove('selected'));
+    el.classList.add('selected');
+    if (currentUser) {
+      currentUser.params.pvz = name;
+      await setDeliveryType('pvz');
+      showToast(`Выбран пункт: ${name}`);
+    }
+  }
+
+  async function openAdminPanel() {
+    showScreen('admin');
+    await loadAdminData();
+  }
+
+  function switchAdminTab(tab) {
+    document.getElementById('admTabUsers').classList.toggle('active', tab === 'users');
+    document.getElementById('admTabProducts').classList.toggle('active', tab === 'products');
+    document.getElementById('admTabOrders').classList.toggle('active', tab === 'orders');
+
+    document.getElementById('adminUsersSection').style.display = tab === 'users' ? 'block' : 'none';
+    document.getElementById('adminProductsSection').style.display = tab === 'products' ? 'block' : 'none';
+    document.getElementById('adminOrdersSection').style.display = tab === 'orders' ? 'block' : 'none';
+  }
+
+  async function loadAdminData() {
+    if (!currentUser || currentUser.role !== 'admin') return;
+    try {
+      const data = await api(`/api/admin/data?adminId=${currentUser.id}`);
+      renderAdminUsers(data.users);
+      renderAdminProducts();
+      renderAdminOrders(data.orders);
+    } catch (e) {
+      showToast(e.message);
+    }
+  }
+
+  function renderAdminUsers(users) {
+    document.getElementById('adminUsersTable').innerHTML = users.map(u => `
+      <tr>
+        <td><b>${u.username}</b><br><span style="font-size:11px; color:#666;">${u.fullname}</span></td>
+        <td>${u.email}</td>
+        <td><span class="role-badge ${u.role === 'admin' ? 'role-admin' : 'role-user'}">${u.role === 'admin' ? (u.isSuperAdmin ? 'Главный Админ' : 'Админ') : 'Покупатель'}</span></td>
+        <td>
+          ${u.isSuperAdmin ? '<span style="font-size:11px; color:#888;">Владелец</span>' : `
+            <button class="hero-btn" style="padding:6px 12px; font-size:11px; background:${u.role === 'admin' ? '#E53935' : '#38C958'};"
+              onclick="toggleUserAdminRole(${u.id}, '${u.role === 'admin' ? 'user' : 'admin'}')">
+              ${u.role === 'admin' ? 'Снять права' : 'Сделать админом'}
+            </button>
+          `}
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  async function toggleUserAdminRole(targetUserId, newRole) {
+    try {
+      const data = await api('/api/admin/role', {
+        method: 'POST',
+        body: JSON.stringify({ adminId: currentUser.id, targetUserId, newRole })
+      });
+      renderAdminUsers(data.users);
+      showToast('Права обновлены!');
+    } catch (e) {
+      showToast(e.message);
+    }
+  }
+
+  function renderAdminProducts() {
+    document.getElementById('adminProductsList').innerHTML = products.map(p => `
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #EEE;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <img src="${p.image}" style="width:46px; height:58px; object-fit:cover; border-radius:8px;">
+          <div>
+            <b>${p.title}</b> (${p.price} ₽)<br>
+            <span style="font-size:11px; color:#666;">Цвет: ${p.color} | Рост: ${p.minHeight}-${p.maxHeight} см</span>
+          </div>
+        </div>
+        <button class="hero-btn" style="background:var(--red); padding:7px 12px; font-size:11px;" onclick="deleteProduct(${p.id})">Удалить</button>
+      </div>
+    `).join('');
+  }
+
+  async function handleAdminAddProduct(e) {
+    e.preventDefault();
+    const product = {
+      title: document.getElementById('newTitle').value.trim(),
+      price: document.getElementById('newPrice').value,
+      category: document.getElementById('newCategory').value,
+      color: document.getElementById('newColor').value.trim(),
+      material: document.getElementById('newMaterial').value.trim(),
+      minHeight: document.getElementById('newMinHeight').value,
+      maxHeight: document.getElementById('newMaxHeight').value,
+      image: document.getElementById('newImageUrl').value.trim()
+    };
+
+    const fileInput = document.getElementById('newImageFile');
+    const sendToServer = async (imgData) => {
+      if (imgData) product.image = imgData;
+      const res = await api('/api/admin/products', {
+        method: 'POST',
+        body: JSON.stringify({ adminId: currentUser.id, product })
+      });
+      products = res.products;
+      renderProducts();
+      renderAdminProducts();
+      e.target.reset();
+      showToast('Товар сохранён в базу!');
+    };
+
+    if (fileInput.files && fileInput.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (ev) => sendToServer(ev.target.result);
+      reader.readAsDataURL(fileInput.files[0]);
+    } else {
+      await sendToServer(null);
+    }
+  }
+
+  async function deleteProduct(productId) {
+    const res = await api(`/api/admin/products?adminId=${currentUser.id}&productId=${productId}`, { method: 'DELETE' });
+    products = res.products;
+    renderProducts();
+    renderAdminProducts();
+    showToast('Товар удалён');
+  }
+
+  function renderAdminOrders(orders) {
+    const box = document.getElementById('adminOrdersList');
+    if (!orders.length) {
+      box.innerHTML = `<div style="color:#666; font-size:13px;">Заказов пока нет.</div>`;
+      return;
+    }
+    box.innerHTML = orders.map(o => `
+      <div style="padding:14px; border:1px solid #EAEAEA; border-radius:14px; margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+          <b>Заказ #${String(o.id).slice(-5)} от ${o.createdAt}</b>
+          <select onchange="updateOrderStatus(${o.id}, this.value)" style="padding:4px 8px; border-radius:6px; font-size:12px; font-weight:600;">
+            <option value="Новый" ${o.status === 'Новый' ? 'selected' : ''}>Новый</option>
+            <option value="В сборке" ${o.status === 'В сборке' ? 'selected' : ''}>В сборке</option>
+            <option value="Отправлен" ${o.status === 'Отправлен' ? 'selected' : ''}>Отправлен</option>
+            <option value="Доставлен" ${o.status === 'Доставлен' ? 'selected' : ''}>Доставлен</option>
+          </select>
+        </div>
+        <div style="font-size:12px; color:#444; margin-bottom:6px;">Клиент: <b>${o.userName}</b> (${o.userEmail})</div>
+        <div style="font-size:12px; color:#444; margin-bottom:6px;">Доставка: ${o.address}</div>
+        <div style="font-size:12px; background:#F8F8F8; padding:8px; border-radius:8px;">
+          ${o.items.map(i => `${i.title} (${i.size}) × ${i.qty} — ${i.price * i.qty} ₽`).join('<br>')}
+          <div style="margin-top:6px; font-weight:700; color:var(--green);">Итого: ${o.total} ₽</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function updateOrderStatus(orderId, status) {
+    await api('/api/admin/orders', {
+      method: 'PUT',
+      body: JSON.stringify({ adminId: currentUser.id, orderId, status })
+    });
+    showToast(`Статус заказа изменён на «${status}»`);
+  }
+
+  function toggleDrawer(open) {
+    document.getElementById('drawerBackdrop').classList.toggle('open', open);
+    document.getElementById('sideDrawer').classList.toggle('open', open);
+  }
+
+  function toggleModal(id, open) {
+    document.getElementById(id).classList.toggle('open', open);
+  }
+
+  function openShareModal() {
+    document.getElementById('shareUrlBox').textContent = `${window.location.origin}/?product=${currentProduct.id}`;
+    toggleModal('shareModal', true);
+  }
+
+  function copyShareLink() {
+    navigator.clipboard?.writeText(document.getElementById('shareUrlBox').textContent);
+    showToast('Ссылка скопирована!');
+    toggleModal('shareModal', false);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  initApp();
+</script>
+</body>
+</html>
