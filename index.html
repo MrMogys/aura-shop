@@ -12,6 +12,7 @@
     :root {
       --bg: #FFFFFF;
       --text: #000000;
+      --text-muted: #666666;
       --green: #38C958;
       --blue: #4E54FF;
       --red: #E53935;
@@ -224,15 +225,40 @@
     }
     .delivery-btn.active { background: var(--green); color: #fff; border-color: var(--green); font-weight: 600; }
 
+    /* Пункты выдачи (ПВЗ) */
     .pvz-item {
-      display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px;
-      cursor: pointer; margin-bottom: 6px; border: 1px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor: pointer;
+      margin-bottom: 8px;
+      border: 1.5px solid transparent;
+      transition: background 0.2s, border-color 0.2s;
     }
+    .pvz-item:hover { background: #F8F8F8; }
     .pvz-item.selected { background: #E8F9EE; border-color: var(--green); }
-    .pvz-logo { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px; flex-shrink: 0; }
-    .pvz-ym { background: #FFCC00; color: #000; }
-    .pvz-cdek { background: #E9F7EF; color: #00A859; }
-    .pvz-post { background: #1937FF; color: #fff; font-size: 8px; border-radius: 6px; }
+    
+    .pvz-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+      background: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border: 1px solid #EAEAEA;
+    }
+    .pvz-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
 
     .cart-wrap { max-width: 860px; margin: 0 auto; padding: 16px 0 36px; width: 100%; }
     .cart-item {
@@ -466,7 +492,6 @@
         <div class="card-box">
           <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:8px;">
             <h1 id="detailTitle" style="font-size:24px; font-weight:600;">Худи оверсайз</h1>
-            <!-- Быстрая кнопка редактирования для админа -->
             <button id="adminQuickEditBtn" class="hero-btn" style="background:#000; padding:6px 14px; font-size:11px; display:none;" onclick="openEditProductModal(currentProduct.id)">✎ Редактировать</button>
           </div>
           <div id="detailPrice" style="font-size:24px; font-weight:700; color:var(--green); margin-bottom:20px;">5500 ₽</div>
@@ -545,26 +570,53 @@
             <div id="recommendedSizeBox" style="margin-top:14px; padding:12px; background:#F5F5F5; border-radius:12px; font-size:12px;"></div>
           </div>
 
+          <!-- СПОСОБЫ ДОСТАВКИ С ПРЯМЫМИ ССЫЛКАМИ НА ОФИЦИАЛЬНЫЕ ЛОГОТИПЫ -->
           <div class="card-box">
             <h3 style="font-size:16px; font-weight:700; margin-bottom:14px;">Способы доставки</h3>
             <button class="delivery-btn active" id="btnDelHome" onclick="setDeliveryType('home')">Доставка на дом</button>
             <button class="delivery-btn" id="btnDelPvz" onclick="setDeliveryType('pvz')">Доставка на ПВЗ</button>
 
             <div style="font-size:12px; font-weight:600; margin:14px 0 8px;">Популярные пункты выдачи:</div>
+
+            <!-- Яндекс Маркет (Садовая) -->
             <div class="pvz-item selected" onclick="selectPvz(this, 'Яндекс Маркет — ул. Садовая, 42')">
-              <div class="pvz-logo pvz-ym">ЯМ</div>
+              <div class="pvz-logo">
+                <img src="https://static.tildacdn.com/tild3831-3438-4336-a537-623062643364/ya-market.png" 
+                     alt="Яндекс Маркет" 
+                     loading="lazy">
+              </div>
               <div><b>Яндекс Маркет</b><br><span style="font-size:11px; color:#666;">ПВЗ ул. Садовая, 42</span></div>
             </div>
+
+            <!-- Яндекс Маркет (Минская) -->
             <div class="pvz-item" onclick="selectPvz(this, 'Яндекс Маркет — ул. Минская, 69')">
-              <div class="pvz-logo pvz-ym">ЯМ</div>
+              <div class="pvz-logo">
+                <img src="https://static.tildacdn.com/tild3831-3438-4336-a537-623062643364/ya-market.png" 
+                     alt="Яндекс Маркет" 
+                     loading="lazy">
+              </div>
               <div><b>Яндекс Маркет</b><br><span style="font-size:11px; color:#666;">ПВЗ ул. Минская, 69</span></div>
             </div>
+
+            <!-- СДЭК -->
             <div class="pvz-item" onclick="selectPvz(this, 'CDEK — пр-т Мира, 52')">
-              <div class="pvz-logo pvz-cdek">CDEK</div>
+              <div class="pvz-logo" style="padding: 1px;">
+                <img src="https://cdn.worldvectorlogo.com/logos/cdek-1.svg" 
+                     alt="CDEK" 
+                     style="object-fit: contain;" 
+                     loading="lazy">
+              </div>
               <div><b>CDEK</b><br><span style="font-size:11px; color:#666;">ПВЗ пр-т Мира, 52</span></div>
             </div>
+
+            <!-- Почта России -->
             <div class="pvz-item" onclick="selectPvz(this, 'Почта России — пр-т Мира, 14')">
-              <div class="pvz-logo pvz-post">ПОЧТА</div>
+              <div class="pvz-logo" style="padding: 0px;">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXOb7f4TJOmATITpkkGWmSBOW5kuJMpxl8pDpHAl1HGS2KuDW23-oMmpw&s=10" 
+                     alt="Почта России" 
+                     style="object-fit: contain;" 
+                     loading="lazy">
+              </div>
               <div><b>Почта России</b><br><span style="font-size:11px; color:#666;">ПВЗ пр-т Мира, 14</span></div>
             </div>
           </div>
@@ -666,7 +718,6 @@
 
 </div>
 
-<!-- ГОРИЗОНТАЛЬНЫЙ ПОДВАЛ -->
 <footer class="footer">
   <div class="footer-container">
     <div>
@@ -737,7 +788,6 @@
     <form onsubmit="handleAdminEditProductSubmit(event)" style="display:grid; gap:10px;">
       <input type="hidden" id="editProdId">
       
-      <!-- Превью текущей картинки -->
       <div style="display:flex; gap:14px; align-items:center; background:#F8F8F8; padding:10px; border-radius:12px;">
         <img id="editProdPreview" src="" style="width:54px; height:70px; object-fit:cover; border-radius:8px; background:#DDD;">
         <div style="font-size:11px; color:#555;">Текущее изображение карточки товара</div>
@@ -1177,7 +1227,6 @@
     document.getElementById('detailColor').textContent = currentProduct.color || 'Чёрный';
     document.getElementById('detailFitRange').textContent = `Рост: ${currentProduct.minHeight}–${currentProduct.maxHeight} см | Обхват груди: ${currentProduct.minChest}–${currentProduct.maxChest} см`;
 
-    // Показывать кнопку редактирования на карточке только админу
     const quickEditBtn = document.getElementById('adminQuickEditBtn');
     if (quickEditBtn) {
       quickEditBtn.style.display = (currentUser && currentUser.role === 'admin') ? 'inline-block' : 'none';
@@ -1426,7 +1475,6 @@
     `).join('');
   }
 
-  // Открытие модалки редактирования
   function openEditProductModal(id) {
     const prod = products.find(p => p.id === id);
     if (!prod) return;
@@ -1488,7 +1536,6 @@
         renderProducts();
         renderAdminProducts();
         
-        // Если мы редактировали товар, который сейчас открыт на экране detail — обновим его
         if (currentProduct && currentProduct.id === Number(id)) {
           openProductDetail(Number(id));
         }
