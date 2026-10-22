@@ -12,7 +12,6 @@
     :root {
       --bg: #FFFFFF;
       --text: #000000;
-      --text-muted: #666666;
       --green: #38C958;
       --blue: #4E54FF;
       --red: #E53935;
@@ -47,7 +46,6 @@
     @media (min-width: 768px) { .page-container { padding: 0 28px; } }
     @media (min-width: 1200px) { .page-container { padding: 0 36px; } }
 
-    /* Шапка во всю ширину */
     .top-bar-outer {
       width: 100%;
       background: rgba(255, 255, 255, 0.94);
@@ -123,7 +121,6 @@
     .screen.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Баннер */
     .hero-banner {
       width: 100%; height: 380px; border-radius: var(--radius-lg);
       position: relative; overflow: hidden; margin: 16px 0 28px;
@@ -153,7 +150,6 @@
       padding: 5px 12px; border-radius: 12px; text-transform: none; font-weight: 600;
     }
 
-    /* Категории */
     .categories-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
     @media (min-width: 768px) { .categories-grid { gap: 20px; } }
     .cat-card { cursor: pointer; text-align: center; }
@@ -161,7 +157,6 @@
     .cat-card:hover img { transform: scale(1.02); }
     .cat-card span { font-size: 11px; font-weight: 600; }
 
-    /* Адаптивная сетка товаров */
     .products-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -186,7 +181,6 @@
     .product-name { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
     .product-price { font-size: 13px; font-weight: 700; }
 
-    /* Детальная карточка */
     .detail-layout { display: grid; grid-template-columns: 1fr; gap: 24px; padding: 18px 0 36px; }
     @media (min-width: 768px) {
       .detail-layout { grid-template-columns: 1fr 1fr; max-width: 980px; margin: 0 auto; gap: 36px; }
@@ -240,7 +234,6 @@
     .pvz-cdek { background: #E9F7EF; color: #00A859; }
     .pvz-post { background: #1937FF; color: #fff; font-size: 8px; border-radius: 6px; }
 
-    /* Корзина */
     .cart-wrap { max-width: 860px; margin: 0 auto; padding: 16px 0 36px; width: 100%; }
     .cart-item {
       background: var(--bg); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);
@@ -252,7 +245,6 @@
     .qty-pill button { border: none; background: transparent; width: 28px; height: 28px; font-size: 16px; cursor: pointer; }
     .qty-pill span { background: #fff; padding: 2px 12px; font-size: 13px; font-weight: 600; }
 
-    /* Профиль */
     .profile-wrap { padding: 16px 0 36px; max-width: 960px; margin: 0 auto; width: 100%; }
     .profile-grid-pc { display: grid; grid-template-columns: 1fr; gap: 24px; }
     @media (min-width: 768px) { .profile-grid-pc { grid-template-columns: 1fr 1fr; } }
@@ -261,7 +253,6 @@
     .role-admin { background: #E8F9EE; color: #198737; }
     .role-user { background: #F0F0F0; color: #555; }
 
-    /* Боковое меню СЛЕВА */
     .drawer-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; display: none; }
     .drawer-backdrop.open { display: block; }
     .side-drawer {
@@ -274,7 +265,6 @@
     .drawer-list { list-style: none; margin-top: 28px; display: flex; flex-direction: column; gap: 18px; font-size: 17px; font-weight: 500; }
     .drawer-list li { cursor: pointer; }
 
-    /* Модалки */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 120;
       display: none; align-items: center; justify-content: center; padding: 16px;
@@ -289,7 +279,6 @@
       border-radius: 50%; border: none; background: #F0F0F0; cursor: pointer;
     }
 
-    /* АДМИН-ПАНЕЛЬ */
     .admin-wrap { padding: 16px 0 36px; max-width: 1060px; margin: 0 auto; width: 100%; }
     .admin-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
     .admin-tab {
@@ -300,7 +289,6 @@
     .admin-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .admin-table th, .admin-table td { padding: 12px 10px; border-bottom: 1px solid #EEE; text-align: left; }
 
-    /* ГОРИЗОНТАЛЬНЫЙ АДАПТИВНЫЙ ПОДВАЛ */
     .footer {
       width: 100%;
       background: var(--footer-bg);
@@ -330,72 +318,25 @@
       margin-bottom: 14px;
       color: #FFFFFF;
     }
-    .footer-desc {
-      font-size: 12px;
-      color: #888888;
-      line-height: 1.6;
-      margin-top: 10px;
-    }
-    .footer-links {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-      font-size: 12px;
-      color: #B5B5B5;
-    }
+    .footer-desc { font-size: 12px; color: #888888; line-height: 1.6; margin-top: 10px; }
+    .footer-links { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 9px; font-size: 12px; color: #B5B5B5; }
     .footer-links li { cursor: pointer; transition: color 0.2s; }
     .footer-links li:hover { color: #FFFFFF; }
-    .footer-form-row {
-      display: flex;
-      gap: 0;
-      width: 100%;
-      max-width: 360px;
-      margin-top: 8px;
-    }
+    .footer-form-row { display: flex; gap: 0; width: 100%; max-width: 360px; margin-top: 8px; }
     .footer-form-row input {
-      flex: 1;
-      background: #FFFFFF;
-      color: #000000;
-      border: none;
-      padding: 10px 14px;
-      font-size: 12px;
-      outline: none;
-      font-family: 'Inter', sans-serif;
+      flex: 1; background: #FFFFFF; color: #000000; border: none; padding: 10px 14px;
+      font-size: 12px; outline: none; font-family: 'Inter', sans-serif;
     }
     .footer-form-row button {
-      background: #FFFFFF;
-      color: #000000;
-      border: none;
-      border-left: 1px solid #EAEAEA;
-      padding: 10px 16px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      letter-spacing: 0.5px;
-      transition: background 0.2s;
+      background: #FFFFFF; color: #000000; border: none; border-left: 1px solid #EAEAEA;
+      padding: 10px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase;
+      cursor: pointer; font-family: 'Inter', sans-serif; letter-spacing: 0.5px; transition: background 0.2s;
     }
     .footer-form-row button:hover { background: #E5E5E5; }
-    .footer-social-row {
-      display: flex;
-      gap: 12px;
-      margin-top: 4px;
-    }
+    .footer-social-row { display: flex; gap: 12px; margin-top: 4px; }
     .social-circle-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: #FFFFFF;
-      color: #000000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      cursor: pointer;
+      width: 36px; height: 36px; border-radius: 50%; background: #FFFFFF; color: #000000;
+      display: flex; align-items: center; justify-content: center; text-decoration: none; cursor: pointer;
       transition: transform 0.2s, background 0.2s;
     }
     .social-circle-btn:hover { transform: scale(1.08); background: #EAEAEA; }
@@ -410,7 +351,6 @@
 </head>
 <body>
 
-<!-- ШАПКА -->
 <header class="top-bar-outer">
   <div class="top-bar">
     <div class="header-left">
@@ -452,10 +392,8 @@
   </div>
 </header>
 
-<!-- ОСНОВНОЙ КОНТЕНТ -->
 <div class="page-container">
 
-  <!-- ЭКРАН 1: ГЛАВНАЯ -->
   <main id="screen-home" class="screen active">
     <div class="hero-banner">
       <div class="hero-bg">
@@ -492,7 +430,6 @@
     <div class="products-grid" id="homeProductsGrid"></div>
   </main>
 
-  <!-- ЭКРАН 2: КАТАЛОГ -->
   <section id="screen-catalog" class="screen">
     <div class="section-title">
       <span id="catalogTitle">КАТАЛОГ</span>
@@ -501,13 +438,11 @@
     <div class="products-grid" id="catalogProductsGrid"></div>
   </section>
 
-  <!-- ЭКРАН 3: ИЗБРАННОЕ -->
   <section id="screen-favorites" class="screen">
     <div class="section-title">ИЗБРАННОЕ ♥</div>
     <div class="products-grid" id="favoritesGrid"></div>
   </section>
 
-  <!-- ЭКРАН 4: КАРТОЧКА ТОВАРА -->
   <section id="screen-detail" class="screen">
     <div class="detail-layout">
       <div class="detail-hero">
@@ -529,7 +464,11 @@
 
       <div>
         <div class="card-box">
-          <h1 id="detailTitle" style="font-size:24px; font-weight:600; margin-bottom:8px;">Худи оверсайз</h1>
+          <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:8px;">
+            <h1 id="detailTitle" style="font-size:24px; font-weight:600;">Худи оверсайз</h1>
+            <!-- Быстрая кнопка редактирования для админа -->
+            <button id="adminQuickEditBtn" class="hero-btn" style="background:#000; padding:6px 14px; font-size:11px; display:none;" onclick="openEditProductModal(currentProduct.id)">✎ Редактировать</button>
+          </div>
           <div id="detailPrice" style="font-size:24px; font-weight:700; color:var(--green); margin-bottom:20px;">5500 ₽</div>
           
           <h3 style="font-size:15px; font-weight:600; margin-bottom:10px;">О товаре</h3>
@@ -558,7 +497,6 @@
     </div>
   </section>
 
-  <!-- ЭКРАН 5: ПРОФИЛЬ -->
   <section id="screen-profile" class="screen">
     <div class="profile-wrap">
       <div id="profileContent">
@@ -635,7 +573,6 @@
     </div>
   </section>
 
-  <!-- ЭКРАН 6: КОРЗИНА -->
   <section id="screen-cart" class="screen">
     <div class="cart-wrap">
       <h2 id="cartHeaderTitle" style="font-size:22px; font-weight:700; margin-bottom:20px;">КОРЗИНА (0)</h2>
@@ -659,7 +596,7 @@
     </div>
   </section>
 
-  <!-- ЭКРАН 7: АДМИН-ПАНЕЛЬ -->
+  <!-- АДМИН-ПАНЕЛЬ -->
   <section id="screen-admin" class="screen">
     <div class="admin-wrap">
       <h2 style="font-size:24px; font-weight:700; margin-bottom:16px;">⚙ Панель администратора AURA</h2>
@@ -732,14 +669,12 @@
 <!-- ГОРИЗОНТАЛЬНЫЙ ПОДВАЛ -->
 <footer class="footer">
   <div class="footer-container">
-    <!-- Колонка 1: Бренд и слоган -->
     <div>
       <div style="font-size:26px; font-weight:700; letter-spacing:1px; color:#fff;">AURA</div>
       <div style="font-size:12px; color:#777; margin-top:2px;">© 2026 AURA Brand</div>
       <p class="footer-desc">Современный минимализм.<br>Твой стиль, твой город.</p>
     </div>
 
-    <!-- Колонка 2: Информация -->
     <div>
       <div class="footer-col-title">Информация</div>
       <ul class="footer-links">
@@ -751,7 +686,6 @@
       </ul>
     </div>
 
-    <!-- Колонка 3: Рассылка -->
     <div>
       <div class="footer-col-title">Рассылка новинок</div>
       <div style="font-size:12px; color:#888; margin-bottom:10px;">Будьте в курсе дропов новых коллекций и закрытых распродаж.</div>
@@ -763,7 +697,6 @@
       </form>
     </div>
 
-    <!-- Колонка 4: Социальные сети -->
     <div>
       <div class="footer-col-title">Мы в соцсетях</div>
       <div class="footer-social-row">
@@ -781,7 +714,6 @@
   </div>
 </footer>
 
-<!-- БОКОВОЕ МЕНЮ СЛЕВА -->
 <div class="drawer-backdrop" id="drawerBackdrop" onclick="toggleDrawer(false)"></div>
 <aside class="side-drawer" id="sideDrawer">
   <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -797,6 +729,74 @@
   </ul>
 </aside>
 
+<!-- МОДАЛЬНОЕ ОКНО: РЕДАКТИРОВАНИЕ ТОВАРА -->
+<div class="modal-overlay" id="editProductModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="toggleModal('editProductModal', false)">✕</button>
+    <h3 style="font-size:18px; font-weight:700; margin-bottom:14px;">Редактирование карточки товара</h3>
+    <form onsubmit="handleAdminEditProductSubmit(event)" style="display:grid; gap:10px;">
+      <input type="hidden" id="editProdId">
+      
+      <!-- Превью текущей картинки -->
+      <div style="display:flex; gap:14px; align-items:center; background:#F8F8F8; padding:10px; border-radius:12px;">
+        <img id="editProdPreview" src="" style="width:54px; height:70px; object-fit:cover; border-radius:8px; background:#DDD;">
+        <div style="font-size:11px; color:#555;">Текущее изображение карточки товара</div>
+      </div>
+
+      <div>
+        <label style="font-size:11px; font-weight:600;">Название вещи</label>
+        <input type="text" id="editProdTitle" class="param-input" required>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div>
+          <label style="font-size:11px; font-weight:600;">Цена (₽)</label>
+          <input type="number" id="editProdPrice" class="param-input" required>
+        </div>
+        <div>
+          <label style="font-size:11px; font-weight:600;">Категория</label>
+          <select id="editProdCategory" class="param-input">
+            <option value="men">Мужчинам</option>
+            <option value="women">Женщинам</option>
+            <option value="accessories">Аксессуары</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div>
+          <label style="font-size:11px; font-weight:600;">Цвет</label>
+          <input type="text" id="editProdColor" class="param-input" required>
+        </div>
+        <div>
+          <label style="font-size:11px; font-weight:600;">Материал</label>
+          <input type="text" id="editProdMaterial" class="param-input" required>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div>
+          <label style="font-size:11px; font-weight:600;">Мин. рост (см)</label>
+          <input type="number" id="editProdMinHeight" class="param-input">
+        </div>
+        <div>
+          <label style="font-size:11px; font-weight:600;">Макс. рост (см)</label>
+          <input type="number" id="editProdMaxHeight" class="param-input">
+        </div>
+      </div>
+      <div>
+        <label style="font-size:11px; font-weight:600;">Заменить фото с устройства:</label>
+        <input type="file" id="editProdImageFile" accept="image/*" class="param-input" style="margin-top:4px;" onchange="previewEditFile(this)">
+      </div>
+      <div>
+        <label style="font-size:11px; font-weight:600;">Или ссылка на фото:</label>
+        <input type="url" id="editProdImageUrl" class="param-input" placeholder="https://..." oninput="previewEditUrl(this.value)">
+      </div>
+      <div style="display:flex; gap:10px; margin-top:8px;">
+        <button type="button" class="hero-btn" style="flex:1; background:#F0F0F0; color:#000;" onclick="toggleModal('editProductModal', false)">Отмена</button>
+        <button type="submit" class="hero-btn" style="flex:1; background:var(--green);">Сохранить</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- МОДАЛЬНОЕ ОКНО: НАСТРОЙКИ ПРОФИЛЯ -->
 <div class="modal-overlay" id="profileSettingsModal">
   <div class="modal-card">
@@ -805,13 +805,10 @@
     <form onsubmit="handleSaveProfileSettings(event)">
       <label style="font-size:12px; font-weight:600; display:block; margin-bottom:4px;">Никнейм (USERNAME)</label>
       <input type="text" id="editUsername" class="param-input" placeholder="USERNAME" required>
-
       <label style="font-size:12px; font-weight:600; display:block; margin-bottom:4px;">Имя и Фамилия (ФИО)</label>
       <input type="text" id="editFullname" class="param-input" placeholder="Моисеев Вячеслав Романович" required>
-
       <label style="font-size:12px; font-weight:600; display:block; margin-bottom:4px;">Email</label>
       <input type="email" id="editEmail" class="param-input" placeholder="user@mail.ru" required>
-
       <div style="display:flex; gap:10px; margin-top:10px;">
         <button type="button" class="hero-btn" style="flex:1; background:#F0F0F0; color:#000;" onclick="toggleModal('profileSettingsModal', false)">Отмена</button>
         <button type="submit" class="hero-btn" style="flex:1; background:var(--green);">Сохранить</button>
@@ -851,7 +848,6 @@
   </div>
 </div>
 
-<!-- МОДАЛКА: ПОДЕЛИТЬСЯ -->
 <div class="modal-overlay" id="shareModal">
   <div class="modal-card" style="text-align:center;">
     <button class="modal-close" onclick="toggleModal('shareModal', false)">✕</button>
@@ -861,7 +857,6 @@
   </div>
 </div>
 
-<!-- МОДАЛКА: КАК СНЯТЬ МЕРКИ -->
 <div class="modal-overlay" id="measureModal">
   <div class="modal-card" style="text-align:center; background:#FFFBF7;">
     <button class="modal-close" onclick="toggleModal('measureModal', false)">✕</button>
@@ -988,7 +983,7 @@
       currentUser = data.user;
       updateAuthUI();
       toggleModal('profileSettingsModal', false);
-      showToast('Данные профиля успешно обновлены!');
+      showToast('Данные профиля обновлены!');
     } catch (err) {
       showToast(err.message);
     }
@@ -1047,7 +1042,7 @@
       toggleModal('authModal', false);
       updateAuthUI();
       renderProducts();
-      showToast('Аккаунт успешно создан!');
+      showToast('Аккаунт создан!');
     } catch (err) {
       showToast(err.message);
     }
@@ -1182,6 +1177,12 @@
     document.getElementById('detailColor').textContent = currentProduct.color || 'Чёрный';
     document.getElementById('detailFitRange').textContent = `Рост: ${currentProduct.minHeight}–${currentProduct.maxHeight} см | Обхват груди: ${currentProduct.minChest}–${currentProduct.maxChest} см`;
 
+    // Показывать кнопку редактирования на карточке только админу
+    const quickEditBtn = document.getElementById('adminQuickEditBtn');
+    if (quickEditBtn) {
+      quickEditBtn.style.display = (currentUser && currentUser.role === 'admin') ? 'inline-block' : 'none';
+    }
+
     const rec = getRecommendedSize();
     if (rec) selectSize(rec);
     const liked = currentUser && currentUser.likes.includes(currentProduct.id);
@@ -1197,10 +1198,7 @@
   }
 
   async function toggleLikeCurrent() {
-    if (!currentUser) {
-      showToast('Войдите в аккаунт для сохранения');
-      return openAuthModal();
-    }
+    if (!currentUser) return openAuthModal();
     const idx = currentUser.likes.indexOf(currentProduct.id);
     if (idx === -1) {
       currentUser.likes.push(currentProduct.id);
@@ -1214,10 +1212,7 @@
   }
 
   async function addCurrentToCart(goToCart) {
-    if (!currentUser) {
-      showToast('Сначала авторизуйтесь');
-      return openAuthModal();
-    }
+    if (!currentUser) return openAuthModal();
     const existing = currentUser.cart.find(i => i.productId === currentProduct.id && i.size === selectedSize);
     if (existing) existing.qty += 1;
     else currentUser.cart.push({ productId: currentProduct.id, size: selectedSize, qty: 1 });
@@ -1415,17 +1410,103 @@
 
   function renderAdminProducts() {
     document.getElementById('adminProductsList').innerHTML = products.map(p => `
-      <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #EEE;">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid #EEE; flex-wrap:wrap; gap:10px;">
         <div style="display:flex; align-items:center; gap:12px;">
           <img src="${p.image}" style="width:46px; height:58px; object-fit:cover; border-radius:8px;">
           <div>
             <b>${p.title}</b> (${p.price} ₽)<br>
-            <span style="font-size:11px; color:#666;">Цвет: ${p.color} | Рост: ${p.minHeight}-${p.maxHeight} см</span>
+            <span style="font-size:11px; color:#666;">Цвет: ${p.color} | Категория: ${p.category} | Рост: ${p.minHeight}-${p.maxHeight} см</span>
           </div>
         </div>
-        <button class="hero-btn" style="background:var(--red); padding:7px 12px; font-size:11px;" onclick="deleteProduct(${p.id})">Удалить</button>
+        <div style="display:flex; gap:8px;">
+          <button class="hero-btn" style="background:#000; padding:7px 12px; font-size:11px;" onclick="openEditProductModal(${p.id})">Редактировать</button>
+          <button class="hero-btn" style="background:var(--red); padding:7px 12px; font-size:11px;" onclick="deleteProduct(${p.id})">Удалить</button>
+        </div>
       </div>
     `).join('');
+  }
+
+  // Открытие модалки редактирования
+  function openEditProductModal(id) {
+    const prod = products.find(p => p.id === id);
+    if (!prod) return;
+    document.getElementById('editProdId').value = prod.id;
+    document.getElementById('editProdTitle').value = prod.title;
+    document.getElementById('editProdPrice').value = prod.price;
+    document.getElementById('editProdCategory').value = prod.category || 'men';
+    document.getElementById('editProdColor').value = prod.color || 'Чёрный';
+    document.getElementById('editProdMaterial').value = prod.material || 'Хлопок';
+    document.getElementById('editProdMinHeight').value = prod.minHeight || 155;
+    document.getElementById('editProdMaxHeight').value = prod.maxHeight || 196;
+    document.getElementById('editProdPreview').src = prod.image;
+    document.getElementById('editProdImageUrl').value = prod.image.startsWith('data:') ? '' : prod.image;
+    document.getElementById('editProdImageFile').value = '';
+    toggleModal('editProductModal', true);
+  }
+
+  function previewEditFile(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        document.getElementById('editProdPreview').src = e.target.result;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  function previewEditUrl(url) {
+    if (url.trim()) {
+      document.getElementById('editProdPreview').src = url.trim();
+    }
+  }
+
+  async function handleAdminEditProductSubmit(e) {
+    e.preventDefault();
+    const id = document.getElementById('editProdId').value;
+    const fileInput = document.getElementById('editProdImageFile');
+    const urlInput = document.getElementById('editProdImageUrl').value.trim();
+
+    const sendUpdate = async (newImage) => {
+      const updatedProduct = {
+        title: document.getElementById('editProdTitle').value.trim(),
+        price: document.getElementById('editProdPrice').value,
+        category: document.getElementById('editProdCategory').value,
+        color: document.getElementById('editProdColor').value.trim(),
+        material: document.getElementById('editProdMaterial').value.trim(),
+        minHeight: document.getElementById('editProdMinHeight').value,
+        maxHeight: document.getElementById('editProdMaxHeight').value,
+      };
+      if (newImage) updatedProduct.image = newImage;
+      else if (urlInput) updatedProduct.image = urlInput;
+
+      try {
+        const res = await api('/api/admin/products', {
+          method: 'PUT',
+          body: JSON.stringify({ adminId: currentUser.id, productId: id, product: updatedProduct })
+        });
+        products = res.products;
+        renderProducts();
+        renderAdminProducts();
+        
+        // Если мы редактировали товар, который сейчас открыт на экране detail — обновим его
+        if (currentProduct && currentProduct.id === Number(id)) {
+          openProductDetail(Number(id));
+        }
+
+        toggleModal('editProductModal', false);
+        showToast('Карточка успешно обновлена!');
+      } catch (err) {
+        showToast(err.message);
+      }
+    };
+
+    if (fileInput.files && fileInput.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (ev) => sendUpdate(ev.target.result);
+      reader.readAsDataURL(fileInput.files[0]);
+    } else {
+      await sendUpdate(null);
+    }
   }
 
   async function handleAdminAddProduct(e) {
@@ -1504,7 +1585,7 @@
       method: 'PUT',
       body: JSON.stringify({ adminId: currentUser.id, orderId, status })
     });
-    showToast(`Статус заказа изменён на «${status}»`);
+    showToast(`Статус заказа: «${status}»`);
   }
 
   function toggleDrawer(open) {

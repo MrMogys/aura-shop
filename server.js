@@ -21,14 +21,8 @@ const INITIAL_DB = {
       passwordHash: hashPassword('admin123'),
       role: 'admin',
       isSuperAdmin: true,
-      params: {
-        height: '', chest: '', waist: '', autofit: false,
-        delivery: 'home', pvz: 'Яндекс Маркет — ул. Садовая, 42'
-      },
-      cart: [
-        { productId: 1, size: 'L', qty: 1 },
-        { productId: 3, size: 'L', qty: 1 }
-      ],
+      params: { height: '', chest: '', waist: '', autofit: false, delivery: 'home', pvz: 'Яндекс Маркет — ул. Садовая, 42' },
+      cart: [{ productId: 1, size: 'L', qty: 1 }],
       likes: [1]
     }
   ],
@@ -65,39 +59,6 @@ const INITIAL_DB = {
       season: 'Всесезонный',
       image: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=600&q=80',
       minHeight: 160, maxHeight: 198, minChest: 84, maxChest: 120, minWaist: 64, maxWaist: 105
-    },
-    {
-      id: 4,
-      title: 'Худи оверсайз Graphite',
-      price: 5500,
-      category: 'men',
-      color: 'Графит',
-      material: 'Хлопок с начёсом',
-      season: 'Всесезонный',
-      image: 'https://images.unsplash.com/photo-1578681994506-b8f463449011?auto=format&fit=crop&w=600&q=80',
-      minHeight: 168, maxHeight: 196, minChest: 90, maxChest: 122, minWaist: 70, maxWaist: 106
-    },
-    {
-      id: 5,
-      title: 'Свитшот минимализм',
-      price: 4900,
-      category: 'women',
-      color: 'Серый меланж',
-      material: 'Хлопок',
-      season: 'Всесезонный',
-      image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80',
-      minHeight: 152, maxHeight: 185, minChest: 76, maxChest: 106, minWaist: 56, maxWaist: 90
-    },
-    {
-      id: 6,
-      title: 'Колье минимализм AURA',
-      price: 2900,
-      category: 'accessories',
-      color: 'Серебро',
-      material: 'Хирургическая сталь',
-      season: 'Всесезонный',
-      image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80',
-      minHeight: 120, maxHeight: 220, minChest: 50, maxChest: 160, minWaist: 40, maxWaist: 150
     }
   ],
   orders: []
@@ -172,9 +133,8 @@ const server = http.createServer(async (req, res) => {
       }
       const db = readDB();
       const exists = db.users.find(u => u.email.toLowerCase() === email.toLowerCase());
-      if (exists) {
-        return sendJSON(res, 400, { error: 'Пользователь с таким Email уже существует' });
-      }
+      if (exists) return sendJSON(res, 400, { error: 'Пользователь с таким Email уже существует' });
+
       const newUser = {
         id: Date.now(),
         email: email.trim(),
@@ -232,7 +192,7 @@ const server = http.createServer(async (req, res) => {
       const { userId, items, total, deliveryType, address } = await parseBody(req);
       const db = readDB();
       const user = db.users.find(u => u.id === Number(userId));
-      if (!user) return sendJSON(res, 404, { error: 'Авторизуйтесь для оформления заказа' });
+      if (!user) return sendJSON(res, 404, { error: 'Авторизуйтесь для заказа' });
 
       const newOrder = {
         id: Date.now(),
@@ -258,23 +218,18 @@ const server = http.createServer(async (req, res) => {
       const admin = db.users.find(u => u.id === adminId && u.role === 'admin');
       if (!admin) return sendJSON(res, 403, { error: 'Доступ запрещён' });
 
-      return sendJSON(res, 200, {
-        users: db.users.map(sanitizeUser),
-        orders: db.orders
-      });
+      return sendJSON(res, 200, { users: db.users.map(sanitizeUser), orders: db.orders });
     }
 
     if (req.method === 'POST' && pathname === '/api/admin/role') {
       const { adminId, targetUserId, newRole } = await parseBody(req);
       const db = readDB();
       const admin = db.users.find(u => u.id === Number(adminId) && u.role === 'admin');
-      if (!admin) return sendJSON(res, 403, { error: 'Нет прав администратора' });
+      if (!admin) return sendJSON(res, 403, { error: 'Нет прав' });
 
       const target = db.users.find(u => u.id === Number(targetUserId));
       if (!target) return sendJSON(res, 404, { error: 'Пользователь не найден' });
-      if (target.isSuperAdmin) {
-        return sendJSON(res, 400, { error: 'Нельзя снять права у главного администратора' });
-      }
+      if (target.isSuperAdmin) return sendJSON(res, 400, { error: 'Нельзя изменить главного администратора' });
 
       target.role = newRole;
       writeDB(db);
@@ -285,7 +240,7 @@ const server = http.createServer(async (req, res) => {
       const { adminId, product } = await parseBody(req);
       const db = readDB();
       const admin = db.users.find(u => u.id === Number(adminId) && u.role === 'admin');
-      if (!admin) return sendJSON(res, 403, { error: 'Нет прав администратора' });
+      if (!admin) return sendJSON(res, 403, { error: 'Нет прав' });
 
       const newProd = {
         id: Date.now(),
@@ -294,7 +249,7 @@ const server = http.createServer(async (req, res) => {
         category: product.category || 'men',
         color: product.color || 'Чёрный',
         material: product.material || 'Хлопок',
-        season: 'Всесезонный',
+        season: product.season || 'Всесезонный',
         image: product.image || 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=600&q=80',
         minHeight: Number(product.minHeight) || 150,
         maxHeight: Number(product.maxHeight) || 200,
@@ -308,12 +263,12 @@ const server = http.createServer(async (req, res) => {
       return sendJSON(res, 200, { products: db.products });
     }
 
-    // РЕДАКТИРОВАНИЕ СУЩЕСТВУЮЩЕГО ТОВАРА
+    // Редактирование карточки товара
     if (req.method === 'PUT' && pathname === '/api/admin/products') {
       const { adminId, productId, product } = await parseBody(req);
       const db = readDB();
       const admin = db.users.find(u => u.id === Number(adminId) && u.role === 'admin');
-      if (!admin) return sendJSON(res, 403, { error: 'Нет прав администратора' });
+      if (!admin) return sendJSON(res, 403, { error: 'Нет прав' });
 
       const target = db.products.find(p => p.id === Number(productId));
       if (!target) return sendJSON(res, 404, { error: 'Товар не найден' });
@@ -339,7 +294,7 @@ const server = http.createServer(async (req, res) => {
       const productId = Number(url.searchParams.get('productId'));
       const db = readDB();
       const admin = db.users.find(u => u.id === adminId && u.role === 'admin');
-      if (!admin) return sendJSON(res, 403, { error: 'Нет прав администратора' });
+      if (!admin) return sendJSON(res, 403, { error: 'Нет прав' });
 
       db.products = db.products.filter(p => p.id !== productId);
       writeDB(db);
@@ -350,7 +305,7 @@ const server = http.createServer(async (req, res) => {
       const { adminId, orderId, status } = await parseBody(req);
       const db = readDB();
       const admin = db.users.find(u => u.id === Number(adminId) && u.role === 'admin');
-      if (!admin) return sendJSON(res, 403, { error: 'Нет прав администратора' });
+      if (!admin) return sendJSON(res, 403, { error: 'Нет прав' });
 
       const order = db.orders.find(o => o.id === Number(orderId));
       if (order) order.status = status;
@@ -364,22 +319,6 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-function getLocalIP() {
-  const nets = os.networkInterfaces();
-  for (const name of Object.keys(nets)) {
-    for (const net of nets[name]) {
-      if (net.family === 'IPv4' && !net.internal) return net.address;
-    }
-  }
-  return 'localhost';
-}
-
 server.listen(PORT, '0.0.0.0', () => {
-  const ip = getLocalIP();
-  console.log('====================================================');
-  console.log('🚀 СЕРВЕР AURA УСПЕШНО ЗАПУЩЕН!');
-  console.log(`💻 Локально на ПК:        http://localhost:${PORT}`);
-  console.log(`📱 По Wi-Fi (без VPN):   http://${ip}:${PORT}`);
-  console.log('🌐 Для доступа другу:    выполни во 2-й консоли: npx localtunnel --port 3000');
-  console.log('====================================================');
+  console.log(`🚀 Сервер запущен на порту ${PORT}`);
 });
