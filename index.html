@@ -315,6 +315,9 @@
     .admin-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .admin-table th, .admin-table td { padding: 12px 10px; border-bottom: 1px solid #EEE; text-align: left; }
 
+    /* ========================================================
+       ПОДВАЛ (ПК: горизонтальный в 4 колонки, МОБИЛЬНЫЙ: чистый и аккуратный)
+       ======================================================== */
     .footer {
       width: 100%;
       background: var(--footer-bg);
@@ -366,6 +369,56 @@
       transition: transform 0.2s, background 0.2s;
     }
     .social-circle-btn:hover { transform: scale(1.08); background: #EAEAEA; }
+
+    /* ТОЛЬКО ДЛЯ ТЕЛЕФОНА (на ПК ничего не меняется) */
+    @media (max-width: 767px) {
+      .footer {
+        padding: 40px 20px 32px;
+        text-align: center;
+      }
+      .footer-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+      }
+      .footer-col-title {
+        font-size: 13px;
+        margin-bottom: 8px;
+      }
+      .footer-desc {
+        max-width: 270px;
+        margin: 6px auto 0;
+        font-size: 12px;
+      }
+      .footer-links {
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+      }
+      .footer-form-row {
+        max-width: 310px;
+        margin: 8px auto 0;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      .footer-form-row input {
+        padding: 11px 12px;
+        font-size: 12px;
+      }
+      .footer-form-row button {
+        padding: 11px 14px;
+        font-size: 11px;
+      }
+      .footer-social-row {
+        justify-content: center;
+        gap: 14px;
+      }
+      .social-circle-btn {
+        width: 38px;
+        height: 38px;
+      }
+    }
 
     .toast {
       position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
@@ -570,7 +623,7 @@
             <div id="recommendedSizeBox" style="margin-top:14px; padding:12px; background:#F5F5F5; border-radius:12px; font-size:12px;"></div>
           </div>
 
-          <!-- СПОСОБЫ ДОСТАВКИ С ПРЯМЫМИ ССЫЛКАМИ НА ОФИЦИАЛЬНЫЕ ЛОГОТИПЫ -->
+          <!-- СПОСОБЫ ДОСТАВКИ -->
           <div class="card-box">
             <h3 style="font-size:16px; font-weight:700; margin-bottom:14px;">Способы доставки</h3>
             <button class="delivery-btn active" id="btnDelHome" onclick="setDeliveryType('home')">Доставка на дом</button>
@@ -578,44 +631,30 @@
 
             <div style="font-size:12px; font-weight:600; margin:14px 0 8px;">Популярные пункты выдачи:</div>
 
-            <!-- Яндекс Маркет (Садовая) -->
             <div class="pvz-item selected" onclick="selectPvz(this, 'Яндекс Маркет — ул. Садовая, 42')">
               <div class="pvz-logo">
-                <img src="https://static.tildacdn.com/tild3831-3438-4336-a537-623062643364/ya-market.png" 
-                     alt="Яндекс Маркет" 
-                     loading="lazy">
+                <img src="https://static.tildacdn.com/tild3831-3438-4336-a537-623062643364/ya-market.png" alt="Яндекс Маркет" loading="lazy">
               </div>
               <div><b>Яндекс Маркет</b><br><span style="font-size:11px; color:#666;">ПВЗ ул. Садовая, 42</span></div>
             </div>
 
-            <!-- Яндекс Маркет (Минская) -->
             <div class="pvz-item" onclick="selectPvz(this, 'Яндекс Маркет — ул. Минская, 69')">
               <div class="pvz-logo">
-                <img src="https://static.tildacdn.com/tild3831-3438-4336-a537-623062643364/ya-market.png" 
-                     alt="Яндекс Маркет" 
-                     loading="lazy">
+                <img src="https://static.tildacdn.com/tild3831-3438-4336-a537-623062643364/ya-market.png" alt="Яндекс Маркет" loading="lazy">
               </div>
               <div><b>Яндекс Маркет</b><br><span style="font-size:11px; color:#666;">ПВЗ ул. Минская, 69</span></div>
             </div>
 
-            <!-- СДЭК -->
             <div class="pvz-item" onclick="selectPvz(this, 'CDEK — пр-т Мира, 52')">
               <div class="pvz-logo" style="padding: 1px;">
-                <img src="https://cdn.worldvectorlogo.com/logos/cdek-1.svg" 
-                     alt="CDEK" 
-                     style="object-fit: contain;" 
-                     loading="lazy">
+                <img src="https://cdn.worldvectorlogo.com/logos/cdek-1.svg" alt="CDEK" style="object-fit: contain;" loading="lazy">
               </div>
               <div><b>CDEK</b><br><span style="font-size:11px; color:#666;">ПВЗ пр-т Мира, 52</span></div>
             </div>
 
-            <!-- Почта России -->
             <div class="pvz-item" onclick="selectPvz(this, 'Почта России — пр-т Мира, 14')">
               <div class="pvz-logo" style="padding: 0px;">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXOb7f4TJOmATITpkkGWmSBOW5kuJMpxl8pDpHAl1HGS2KuDW23-oMmpw&s=10" 
-                     alt="Почта России" 
-                     style="object-fit: contain;" 
-                     loading="lazy">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXOb7f4TJOmATITpkkGWmSBOW5kuJMpxl8pDpHAl1HGS2KuDW23-oMmpw&s=10" alt="Почта России" style="object-fit: contain;" loading="lazy">
               </div>
               <div><b>Почта России</b><br><span style="font-size:11px; color:#666;">ПВЗ пр-т Мира, 14</span></div>
             </div>
